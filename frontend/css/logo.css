@@ -1,0 +1,81 @@
+.login-page{
+    padding-top: 165px;
+}
+.login-logo{
+    max-width: 100%;
+    height: auto;
+    text-align: center;
+}
+.login-logo img{
+    width: 30%;
+    max-width: 516px;
+    min-width: 320px;
+    height: auto;
+}
+/* LOGIN FIELDS */
+.login-fields{
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 30px;
+    
+    max-width: 404px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.login-field{
+    color: white;
+    font-size: 16px;
+    width: 100%;
+}
+.login-field input{
+    width: 100%;
+}
+.login-field p{
+    margin-bottom: 5px;
+}
+.login-field-password{
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.login-field-password-input{
+    width: 85%;
+}
+.login-field-password-icon{
+    width: 15%;
+    text-align: center;
+    color: black;
+    
+}
+.login-field-password-icon i {
+    font-size: 21px;
+}
+
+/* Play button field */
+.play-button-field{
+    display: flex;
+    justify-content: center;
+}
+
+/* Create account field */
+.create-one{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 5px;
+}
+.create-one p{
+    color: white;
+}
+.create-one a{
+    color: var(--light-blue);
+    text-decoration: none;
+}
