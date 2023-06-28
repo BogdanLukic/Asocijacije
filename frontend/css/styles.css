@@ -19,6 +19,13 @@
   --light-blue: #34CEB8;
 
   --box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.3);
+  --backgound-card: rgba(56, 56, 56, 0.50);
+
+  --color-green: #4F7368;
+  --color-free-in-lobby: #3FC65C;
+  --color-in-game-lobby:#C54938;
+
+  --border-radius: 12px;
 }
 #bodyContainer {
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--backgroung-v2);
@@ -53,6 +60,21 @@
   padding: 15px 23px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  margin-bottom: 15px;
+  box-shadow: var(--box-shadow);
+}
+.play-button-solo{
+  width:130px;
+  text-align: center;
+  background-color: var(--light-blue);
+  border: none;
+  border-radius: 12px;
+  font-size: 20px;
+  padding: 15px 23px;
+  display: flex;
+  justify-content: center;
   align-items: center;
   column-gap: 10px;
   margin-bottom: 15px;
