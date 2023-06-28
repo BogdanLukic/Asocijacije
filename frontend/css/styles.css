@@ -64,3 +64,16 @@
 .input-password-bs{
   box-shadow: var(--box-shadow);
 }
+
+/* txt-shadow */
+.txt-shadow{
+  text-shadow: var(--box-shadow);
+}
+.img-shadow{
+  filter: drop-shadow(--box-shadow);
+}
+
+/* character */
+.character{
+  width: 195px;
+}
