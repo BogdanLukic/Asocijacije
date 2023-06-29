@@ -60,16 +60,20 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
+    min-width: 675px;
 }
 .top, .bottom{
     display: flex;
     flex-direction: column;
     row-gap:8px;
+    min-width: 675px;
 }
 .row{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    column-gap: 25px;
+    min-width: 675px;
 }
 .row button, .btn button{
     min-width: 325px;
@@ -80,6 +84,7 @@
     border: none;
 }
 .btn{
+    width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 10px;
