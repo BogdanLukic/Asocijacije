@@ -1,0 +1,85 @@
+#bodyContainer{
+    padding-top: 77px;
+    overflow-y: auto;
+    padding-bottom: 50px;
+}
+.register-page{
+    text-align: center;
+}
+.register-logo{
+    max-width: 100%;
+    height: auto;
+    text-align: center;
+}
+.register-logo img{
+    width: 30%;
+    max-width: 516px;
+    min-width: 320px;
+    height: auto;
+}
+/* Carousel */
+.register-carousel{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10%;
+}
+.register-carousel i{
+    font-size: 52px;
+    color: white;
+    text-shadow: var(--box-shadow);
+    cursor: pointer;
+}
+
+/* Register-fields */
+.register-fields{
+    width: 100%;
+    text-align: center;
+}
+.register-field{
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 28px;
+    width: 70%;
+    margin-bottom: 10px;
+}
+.register-field>div , .register-field input{
+    width: 100%;
+    max-width: 350px;
+    min-width: 320px;
+}
+.register-field p{
+    text-align: left;
+    color: white;
+    margin-bottom: 5px;
+}
+
+/* register-button-field */
+.register-button-field > div{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 38px;
+}
+.play-button-reg{
+    width:200px !important;
+}
+div a{
+    color: var(--light-blue);
+    text-decoration: none;
+}
+
+/* responsivity */
+@media screen and (max-width: 725px) {
+    .register-carousel{
+        column-gap: 8%;
+    }
+    .register-field p{
+        margin-top:5px;
+        margin-bottom: 5px;
+    }
+}
