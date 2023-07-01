@@ -3,8 +3,10 @@ package Servlets;
 import Database.DbContext;
 import Database.IDatabase;
 import Models.Account;
+import Services.TokenJJWT;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -40,7 +42,12 @@ public class Login extends HttpServlet {
 
         BufferedWriter bw = new BufferedWriter(resp.getWriter());
         if(response != null)
-            bw.write(response);
+        {
+            response = TokenJJWT.generateToken(account);
+            ObjectNode response_json = objMapper.createObjectNode();
+            response_json.put("token",response);
+            bw.write(objMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response_json));
+        }
         else
             bw.write("null");
         bw.flush();

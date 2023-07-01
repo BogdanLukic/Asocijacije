@@ -43,6 +43,7 @@ public class DbContext implements IDatabase{
             ResultSet haveRes = pst.executeQuery();
             if(haveRes.next())
             {
+                account.setId(haveRes.getInt("id"));
                 account.setEmail(haveRes.getString("email"));
                 account.setUsername(haveRes.getString("username"));
                 account.setRole_id(haveRes.getInt("role_id"));

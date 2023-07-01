@@ -1,4 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    response.sendRedirect("frontend/html/login.html");
+%>
 <!DOCTYPE html>
 <html>
 <head>

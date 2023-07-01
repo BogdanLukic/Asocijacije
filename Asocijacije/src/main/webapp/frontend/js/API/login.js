@@ -4,19 +4,62 @@ var password = document.getElementById('password');
 
 username.addEventListener('keydown', function(event) {
     if (event.keyCode === 13)
-        myFunction();
+        test();
     });
 
 password.addEventListener('keydown', function(event) {
     if (event.keyCode === 13)
-        myFunction();
+        test();
     });
 
 button.addEventListener('click', function() {
-    myFunction();
+    test();
 });
 
-function myFunction() {
-    alert('Funkcija je izvršena!');
+function show_pass(){
+    switch(password.type){
+        case'password':
+            password.type = "text";
+            break;
+        default:
+            password.type = "password";
+            break;
+    }
+}
+
+function test() {
+    var error = document.getElementsByClassName("error-msg")[0];
+    if(username.value.length == 0 || password.value.length == 0){
+        error.style.visibility = 'visible';
+    }
+    else{
+        error.style.visibility = 'hidden';
+        var account = {
+            username:username.value,
+            password:password.value
+        };
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 
+                    'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(account)   
+        }
+        let fetchRes = fetch("http://localhost:8081/Asocijacije_war_exploded/login",options);
+        fetchRes.then(res => res.json())
+            .then(
+                d=>{
+                    console.log(d);
+                    if(d !== null)
+                    {
+                        window.open('lobby.html','_self');
+                    }
+                    else
+                        error.style.visibility = 'visible';
+                }
+            )
+    }
+        
 }
   
