@@ -21,7 +21,7 @@
     align-items: center;
     width: 100%;
     padding: 30px;
-    
+    padding-bottom: 10px;
     max-width: 404px;
     margin-left: auto;
     margin-right: auto;
@@ -78,4 +78,11 @@
 .create-one a{
     color: var(--light-blue);
     text-decoration: none;
+}
+/* error message */
+.error-msg{
+    color: var(--color-in-game-lobby);
+    text-align: center;
+    margin-bottom: 10px;
+    visibility: hidden;
 }

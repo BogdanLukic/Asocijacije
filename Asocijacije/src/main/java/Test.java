@@ -8,7 +8,7 @@ public class Test {
         Account account = new Account();
         account.setUsername("bogdanlukic");
         account.setPassword("bogdan123");
-        account = db.login(account);
+//        account = db.login(account);
         System.out.println(account.toString());
     }
 }

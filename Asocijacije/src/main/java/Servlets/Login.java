@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(name = "Login", urlPatterns = "/login")
 public class Login extends HttpServlet {
@@ -37,11 +36,11 @@ public class Login extends HttpServlet {
         account.setUsername(username);
         account.setPassword(password);
 
-        Account log = db.login(account);
+        String response = db.login(account);
 
         BufferedWriter bw = new BufferedWriter(resp.getWriter());
-        if(log != null)
-            bw.write(log.toString());
+        if(response != null)
+            bw.write(response);
         else
             bw.write("null");
         bw.flush();

@@ -23,7 +23,7 @@
           <p class="txt-shadow">Korisničko ime</p>
         </div>
         <div>
-          <input type="text" class="input-classic input-classic-bs" placeholder="Unesite korisničko ime">
+          <input type="text" class="input-classic input-classic-bs" placeholder="Unesite korisničko ime" id="username">
         </div>
       </div>
       <div class="login-field">
@@ -32,16 +32,21 @@
         </div>
         <div class="login-field-password input-password-bs">
           <div class="login-field-password-input">
-            <input type="password" class="input-classic" placeholder="Unesite šifru">
+            <input type="password" class="input-classic" placeholder="Unesite šifru" id="password">
           </div>
           <div class="login-field-password-icon">
-            <i class="  "></i>
+            <i class="bi bi-eye"></i>
           </div>
         </div>
       </div>
     </div>
+    <!-- <div> -->
+      <div>
+        <p class="error-msg">Korisničko ime ili šifra nisu ispravne</p> 
+      </div>
+    <!-- </div> -->
     <div class="play-button-field">
-      <div class="play-button">
+      <div class="play-button" id="button">
         <p class="txt-shadow">Igraj</p>
         <img src="../images/icons/uil_rocket.png">
       </div>
@@ -56,5 +61,8 @@
     </div>
   </div>
 </div>
+
+<script src="../js/API/login.js"></script>
+
 </body>
 </html>

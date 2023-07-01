@@ -6,16 +6,18 @@ public class Account {
     private String email;
     private String password;
     private int role_id;
+    private int character;
 
     public Account() {
     }
 
-    public Account(int id, String username, String email, String password, int role_id) {
+    public Account(String username, String email, String password, int role_id, int character) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role_id = role_id;
+        this.character = character;
     }
 
     public int getId() {
@@ -58,6 +60,14 @@ public class Account {
         this.role_id = role_id;
     }
 
+    public int getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(int character) {
+        this.character = character;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -66,6 +76,7 @@ public class Account {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", role_id=" + role_id +
+                ", character='" + character + '\'' +
                 '}';
     }
 }
