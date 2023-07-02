@@ -52,8 +52,8 @@ function test() {
                 d=>{
                     if(d !== null)
                     {
-                        
-                        // window.open('lobby.html','_self');
+                        sessionStorage.setItem("token",d.token);
+                        window.open('lobby.jsp','_self');
                     }
                     else
                         error.style.visibility = 'visible';

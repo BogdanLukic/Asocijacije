@@ -64,7 +64,9 @@
     display: flex;
     justify-content: center;
 }
-
+.play-button{
+    cursor: pointer;
+}
 /* Create account field */
 .create-one{
     display: flex;
