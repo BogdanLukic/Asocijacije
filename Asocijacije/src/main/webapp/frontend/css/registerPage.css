@@ -63,7 +63,7 @@
 .register-button-field > div{
     margin-left: auto;
     margin-right: auto;
-    margin-top: 38px;
+    margin-top: 25px;
 }
 .play-button-reg{
     width:200px !important;
@@ -71,6 +71,14 @@
 div a{
     color: var(--light-blue);
     text-decoration: none;
+}
+
+/* error */
+.error-msg{
+    color: var(--color-in-game-lobby) !important;
+    text-align: center !important;
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
 }
 
 /* responsivity */

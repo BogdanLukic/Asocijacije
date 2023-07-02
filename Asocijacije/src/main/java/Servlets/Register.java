@@ -6,6 +6,7 @@ import Models.Account;
 import Models.ERegistrationStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,7 +39,10 @@ public class Register extends HttpServlet{
 
             ERegistrationStatus response = db.register(account);
             BufferedWriter bw = new BufferedWriter(resp.getWriter());
-            bw.write(response.toString());
+
+            ObjectNode response_json = objMapper.createObjectNode();
+            response_json.put("response",response.toString());
+            bw.write(objMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response_json));
             bw.flush();
         }
 }

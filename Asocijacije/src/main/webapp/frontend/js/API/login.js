@@ -50,10 +50,10 @@ function test() {
         fetchRes.then(res => res.json())
             .then(
                 d=>{
-                    console.log(d);
                     if(d !== null)
                     {
-                        window.open('lobby.html','_self');
+                        
+                        // window.open('lobby.html','_self');
                     }
                     else
                         error.style.visibility = 'visible';
