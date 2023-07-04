@@ -1,4 +1,13 @@
+<%@ page import="Entities.Accounts" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%
+    if(session.getAttribute("token") == null){
+        response.sendRedirect("login.jsp");
+        return;
+    }
+    Accounts account = (Accounts) session.getAttribute("token");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,8 +20,9 @@
     <link rel="stylesheet" href="../css/lobby.css">
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-  </head>
-  <body>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+  <body onload="init()">
     <div id="bodyContainer">
         <div class="lobby-logo">
             <img src="../images/logo/logo.png">
@@ -20,12 +30,12 @@
         <div class="lobby-page">
             <div class="lobby-page-personal-info">
                 <div>
-                    <img class="character" src="../images/characters/7.png">
+                    <img class="character" src="../images/characters/<%=account.getCharacter()%>.png">
                 </div>
                 <div class="lobby-page-personal-info-info">
-                    <p>Korisničko ime: <span>Bogdan Lukić</span></p>
-                    <p>Email: <span>bogdanlukic2002@gmail.com</span></p>
-                    <p>Trenutni rezultat: <span>110</span></p>
+                    <p>Korisničko ime: <span><%=account.getUsername()%></span></p>
+                    <p>Email: <span><%=account.getEmail()%></span></p>
+                    <p>Trenutni rezultat: <span></span></p>
                 </div>
             </div>
             <div class="lobby-page-row">
@@ -171,5 +181,7 @@
             </div>
         </div>
     </div>
+
+<script src="../js/Socket/WebSocket.js"></script>
   </body>
 </html>

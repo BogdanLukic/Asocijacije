@@ -1,8 +1,8 @@
 package Servlets;
 
-import Database.DbContext;
+import Database.Database;
 import Database.IDatabase;
-import Models.Account;
+import Entities.Accounts;
 import Models.ERegistrationStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ public class Register extends HttpServlet{
         IDatabase db;
         @Override
         public void init(ServletConfig config) throws ServletException {
-            db = DbContext.getConnection();
+            db = Database.getConnection();
         }
 
         @Override
@@ -35,8 +35,11 @@ public class Register extends HttpServlet{
             String email = jsonNode.get("email").asText();
             String character = jsonNode.get("character").asText();
             int num_character = Integer.parseInt(character);
-            Account account = new Account(username,email,password,2,num_character);
-
+            Accounts account = new Accounts();
+            account.setUsername(username);
+            account.setPassword(password);
+            account.setEmail(email);
+            account.setCharacter(num_character);
             ERegistrationStatus response = db.register(account);
             BufferedWriter bw = new BufferedWriter(resp.getWriter());
 

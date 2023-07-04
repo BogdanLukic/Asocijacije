@@ -63,7 +63,7 @@ function email_test(email){
     return false;
 }
 function password_test(password){
-    const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$");
+    const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}$");
     if(regex.test(password)){
         password_error_msg.style.visibility = 'hidden';
         return true;

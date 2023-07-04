@@ -1,9 +1,9 @@
 package Database;
 
-import Models.Account;
+import Entities.Accounts;
 import Models.ERegistrationStatus;
 
 public interface IDatabase {
-    public String login(Account account);
-    public ERegistrationStatus register(Account account);
+    public Accounts login(Accounts account);
+    public ERegistrationStatus register(Accounts account);
 }

@@ -1,14 +1,20 @@
-import Database.DbContext;
+import Database.Database;
 import Database.IDatabase;
-import Models.Account;
+import Entities.Accounts;
 
 public class Test {
+
     public static void main(String[] args) {
-        IDatabase db = DbContext.getConnection();
-        Account account = new Account();
-        account.setUsername("bogdanlukic");
-        account.setPassword("bogdan123");
-//        account = db.login(account);
-        System.out.println(account.toString());
+
+        IDatabase db = Database.getConnection();
+
+        Accounts accounts = new Accounts();
+        accounts.setEmail("bogdanlukic20@gmail.com");
+        accounts.setPassword("Bogdan123");
+        accounts.setCharacter(2);
+        accounts.setUsername("Bocaa7");
+        System.out.println(db.register(accounts));
+
+
     }
 }

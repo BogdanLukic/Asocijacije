@@ -1,18 +1,19 @@
 package Services;
 
-import Models.Account;
+import Entities.Accounts;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 
 public class TokenJJWT {
+//    TEST
     private static String secretKey = "Asocijacije-53/2020";
     private static long expirationTimeInMillis = 86400000; // Vreme isteka tokena 1 dan
 
-    public static String generateToken(Account account){
+    public static String generateToken(Accounts account){
         String role;
-        switch (account.getRole_id()){
+        switch (account.getRole().getId()){
             case 1:
                 role = "admin";
                 break;
