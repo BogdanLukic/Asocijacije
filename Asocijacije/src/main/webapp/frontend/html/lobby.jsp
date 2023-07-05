@@ -21,6 +21,7 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
 </head>
   <body onload="init()">
     <div id="bodyContainer">
@@ -41,8 +42,8 @@
             <div class="lobby-page-row">
                 <div class="place">
                     <p>Aktivni korisnici:</p>
-                    <div class="active-users-field">
-                        <div class="active-user">
+                    <div class="active-users-field" id="active-users">
+                        <!-- <div class="active-user">
                             <div>
                                 <img class="active-user-character" src="../images/characters/0.png">
                             </div>
@@ -85,7 +86,7 @@
                                     <img src="../images/icons/sword-off.png">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="place">
@@ -182,6 +183,7 @@
         </div>
     </div>
 
+<script src="../js/lobby.js"></script>
 <script src="../js/Socket/WebSocket.js"></script>
   </body>
 </html>

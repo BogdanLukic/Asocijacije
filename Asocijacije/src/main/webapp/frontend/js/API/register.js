@@ -109,7 +109,7 @@ function registration(){
             d=>{
                 switch(d.response){
                     case "Success_registration":
-                        window.open('login.html','_self');
+                        window.open('login.jsp','_self');
                         break;
                     case "Email_is_existing":
                         password_error_msg.innerHTML = "Nalog na ovoj email adresi postoji";

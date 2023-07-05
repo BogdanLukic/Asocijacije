@@ -1,6 +1,7 @@
 package Socket;
 
 import Entities.Accounts;
+import Models.UserSessionData;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -8,9 +9,12 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 class ServerSocketIO {
 
@@ -37,6 +41,7 @@ class ServerSocketIO {
             @Override
             public void onDisconnect(SocketIOClient client) {
                 System.out.println("Klijent se odspojio: " + client.getSessionId());
+                ActiveUsers.removeUser(client);
             }
         });
     }
@@ -69,25 +74,21 @@ class ServerSocketIO {
         server.addEventListener("register", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient client, String message, AckRequest ackRequest) throws Exception {
-                Accounts account = objectMapper.readValue(message, Accounts.class);
-                ActiveUsers.addUser(account,client);
+                UserSessionData usd = objectMapper.readValue(message, UserSessionData.class);
+                usd.setSocket(client);
+                ActiveUsers.addUser(UUID.fromString(usd.getUuid()), usd, client);
             }
         });
     }
     private void getListOfActiveUsers(){
         server.addEventListener("getListOfActiveUsers", String.class, new DataListener<String>() {
             @Override
-            public void onData(SocketIOClient client, String s, AckRequest ackRequest) throws Exception {
-//                Test send all active users without and who requested this
-//                List<Accounts> response = ActiveUsers.getAllActiveUsers();
-//                String response_string = objectMapper.writeValueAsString(response);
-//                client.sendEvent("getListOfActiveUsers",response_string);
-
-                List<Accounts> response = ActiveUsers.getAllActiveUsers(client);
+            public void onData(SocketIOClient client, String message, AckRequest ackRequest) throws Exception {
+                UUID uuid = UUID.fromString(message);
+                List<Accounts> response = ActiveUsers.getAllActiveUsers(uuid);
                 String response_string = objectMapper.writeValueAsString(response);
                 client.sendEvent("getListOfActiveUsers",response_string);
             }
         });
     }
-
 }
