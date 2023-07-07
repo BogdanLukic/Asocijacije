@@ -103,9 +103,16 @@ public class Database implements IDatabase{
         else {
             Role role = em.find(Role.class,2);
             account.setRole(role);
-            em.getTransaction().begin();
-            em.persist(account);
-            em.getTransaction().commit();
+
+            EntityManagerFactory emf_temp = Persistence.createEntityManagerFactory("asocijacije");
+            EntityManager em_temp = emf_temp.createEntityManager();
+
+            em_temp.getTransaction().begin();
+            em_temp.merge(account);
+            em_temp.getTransaction().commit();
+
+            em_temp.close();
+            emf_temp.close();
             return ERegistrationStatus.Success_registration;
         }
     }

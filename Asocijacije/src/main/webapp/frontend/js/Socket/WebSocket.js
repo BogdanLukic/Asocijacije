@@ -66,23 +66,37 @@ function register(){
     obj.socket = null
 
     socket.emit("register",JSON.stringify(obj));
-    getListOfActiveUsers();
 }
 
 function getListOfActiveUsers(){
-    console.log(uuid);
     socket.emit('getListOfActiveUsers',uuid);
+}
+
+function sendGlobalMsg(){
+    msg = document.querySelector("#new_msg");
+    obj = new Object();
+    obj.username = account_information.username;
+    obj.text = msg.value;
+    socket.emit("global-message",JSON.stringify(obj));
+    msg.value ="";
 }
 
 // EVENTS
 // ===========================================================================
 function addEvents(){
     getListOfActiveUsersEvent();
+    globalMsg();
 }
 
 function getListOfActiveUsersEvent(){
     socket.on('getListOfActiveUsers',(data)=>{
-        console.log('Lista aktivnih korisnika:', data);
         setActiveUsers(data);
     })
+}
+function globalMsg(){
+    socket.on('global-message',(data)=>{
+        global_msg = JSON.parse(data);
+        console.log(global_msg);
+        setNewGlobalMsg(global_msg,account_information.username);
+    }) 
 }

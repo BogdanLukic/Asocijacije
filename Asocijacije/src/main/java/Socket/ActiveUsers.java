@@ -1,6 +1,7 @@
 package Socket;
 
 import Entities.Accounts;
+import Models.Message;
 import Models.UserSessionData;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -80,4 +81,18 @@ class ActiveUsers {
             e.printStackTrace();
         }
     }
+
+    public static void sendGlobalMessage(Message message){
+        try{
+            for (Map.Entry<UUID,UserSessionData> entry:list_of_active_users.entrySet()) {
+                SocketIOClient socket =  entry.getValue().getSocket();
+                socket.sendEvent("global-message",objectMapper.writeValueAsString(message));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
 }

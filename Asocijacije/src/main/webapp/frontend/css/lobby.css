@@ -185,10 +185,14 @@
 }
 .chat-message-username{
     color: var(--light-blue);
-    min-width: 130px;
+    max-width: 130px;
 }
 .chat-message-msg{
     inline-size: 340px; 
     overflow-wrap: break-word; 
     color: white;
+}
+.welcome-msg{
+    text-align: center;
+    color: grey;
 }

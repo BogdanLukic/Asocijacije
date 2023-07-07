@@ -157,25 +157,27 @@
                     <p>Global chat</p>
                 </div>
                 <div class="no-active">
-
                 </div>
             </div>
-            <div class="chat-message">
-                <div class="chat-message-one">
+            <div id="chat-message" class="chat-message">
+                <div class="welcome-msg">
+                    <p>Dobrodošli u naš grupni chat za igru asocijacije!</p>
+                </div>
+                <!-- <div class="chat-message-one">
                     <div>
-                        <p class="chat-message-username">Bogdan Lukic:</p>
+                        <p class="chat-message-username">Server:</p>
                     </div>
                     <div class="chat-message-msg">
-                        <p>asdasdsadsasasdasdsadsasasdasdsadsasasdasdsadsasasdasdsadsasasdasdsadsas</p>
+                        <p>Dobrodošli na server</p>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="chat-insert">
                 <div class="chat-insert-input">
-                    <input type="text" class="input-classic input-classic-bs" placeholder="Text...">
+                    <input id="new_msg" type="text" class="input-classic input-classic-bs" placeholder="Text...">
                 </div>
                 <div>
-                    <div class="play-button-solo">
+                    <div class="play-button-solo" onclick="sendGlobalMsg()">
                         <p class="txt-shadow">Pošalji</p>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 package Socket;
 
 import Entities.Accounts;
+import Models.Message;
 import Models.UserSessionData;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
@@ -68,6 +69,7 @@ class ServerSocketIO {
     private void setAllEventListener(){
         register();
         getListOfActiveUsers();
+        globalChat();
     }
     ObjectMapper objectMapper = new ObjectMapper();
     private void register(){
@@ -88,6 +90,16 @@ class ServerSocketIO {
                 List<Accounts> response = ActiveUsers.getAllActiveUsers(uuid);
                 String response_string = objectMapper.writeValueAsString(response);
                 client.sendEvent("getListOfActiveUsers",response_string);
+            }
+        });
+    }
+
+    private void globalChat(){
+        server.addEventListener("global-message", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
+                Message global_msg = objectMapper.readValue(message,Message.class);
+                ActiveUsers.sendGlobalMessage(global_msg);
             }
         });
     }
