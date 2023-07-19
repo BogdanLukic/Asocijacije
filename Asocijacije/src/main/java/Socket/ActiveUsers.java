@@ -1,7 +1,9 @@
 package Socket;
 
 import Entities.Accounts;
+import Models.Inbox;
 import Models.Message;
+import Models.PrivateMessage;
 import Models.UserSessionData;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -11,6 +13,7 @@ import java.util.*;
 
 class ActiveUsers {
     private static HashMap<UUID, UserSessionData> list_of_active_users = new HashMap<UUID,UserSessionData>();
+    private static HashMap<String, Inbox> private_message_list = new HashMap<>();
 
     public static void addUser(UUID uuid, UserSessionData usd, SocketIOClient socket){
         if(!list_of_active_users.containsKey(uuid)) {
@@ -28,26 +31,10 @@ class ActiveUsers {
             sendAllChanges();
         }
     }
-    public static List<Accounts> getAllActiveUsers(){
-        List<Accounts> active_users = new ArrayList<Accounts>();
-        for (Map.Entry<UUID,UserSessionData> entry : list_of_active_users.entrySet()) {
-            active_users.add(entry.getValue().getAccounts());
-        }
-        return active_users;
-    }
     public static List<Accounts> getAllActiveUsers(UUID uuid){
         List<Accounts> active_users = new ArrayList<Accounts>();
         for (Map.Entry<UUID,UserSessionData> entry : list_of_active_users.entrySet()) {
             if(!entry.getKey().equals(uuid))
-                active_users.add(entry.getValue().getAccounts());
-        }
-        return active_users;
-    }
-
-    public static List<Accounts> getAllActiveUsers(SocketIOClient socket){
-        List<Accounts> active_users = new ArrayList<Accounts>();
-        for (Map.Entry<UUID,UserSessionData> entry : list_of_active_users.entrySet()) {
-            if(!entry.getValue().getSocket().equals(socket))
                 active_users.add(entry.getValue().getAccounts());
         }
         return active_users;
@@ -93,6 +80,56 @@ class ActiveUsers {
             e.printStackTrace();
         }
 
+    }
+    private static SocketIOClient getSocketPerUsername(String username){
+        for (Map.Entry<UUID,UserSessionData> entry: list_of_active_users.entrySet()) {
+            if(entry.getValue().getAccounts().getUsername().equals(username))
+                return entry.getValue().getSocket();
+        }
+        return null;
+    }
+    private static int getCharacterId(String username){
+        for (Map.Entry<UUID,UserSessionData> entry : list_of_active_users.entrySet()) {
+            if(entry.getValue().getAccounts().getUsername().equals(username)){
+                return entry.getValue().getAccounts().getCharacter();
+            }
+        }
+        return -1;
+    }
+    public static void sendPrivateMessage(PrivateMessage privateMessage){
+        if(!private_message_list.containsKey(privateMessage.getMessageTo())){
+            synchronized (private_message_list){
+                private_message_list.put(privateMessage.getMessageTo(),new Inbox());
+            }
+        }
+        try{
+            Inbox inbox =  private_message_list.get(privateMessage.getMessageTo());
+            int characte_id = getCharacterId(privateMessage.getUsername());
+            privateMessage.setCharacter_id(characte_id);
+            inbox.addNewMessage(privateMessage.getUsername(),privateMessage);
+            SocketIOClient socket = getSocketPerUsername(privateMessage.getMessageTo());
+            socket.sendEvent("private-message",objectMapper.writeValueAsString(inbox.getAllMessages()));
+            socket.sendEvent("private-message-"+privateMessage.getMessageTo(),objectMapper.writeValueAsString(privateMessage));
+        }
+        catch (Exception e){e.printStackTrace();}
+    }
+
+    public static void removeChat(String username, String messageTo){
+        Inbox inbox =  private_message_list.get(username);
+        inbox.removeChat(messageTo);
+    }
+
+    public static void getInbox(String username){
+        try{
+            Inbox inbox = private_message_list.get(username);
+            if(inbox != null){
+                SocketIOClient socket = getSocketPerUsername(username);
+                socket.sendEvent("private-message",objectMapper.writeValueAsString(inbox.getAllMessages()));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

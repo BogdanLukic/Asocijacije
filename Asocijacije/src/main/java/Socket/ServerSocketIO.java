@@ -1,7 +1,9 @@
 package Socket;
 
 import Entities.Accounts;
+import Models.Inbox;
 import Models.Message;
+import Models.PrivateMessage;
 import Models.UserSessionData;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
@@ -70,6 +72,8 @@ class ServerSocketIO {
         register();
         getListOfActiveUsers();
         globalChat();
+        privateChat();
+        clearChat();
     }
     ObjectMapper objectMapper = new ObjectMapper();
     private void register(){
@@ -79,6 +83,7 @@ class ServerSocketIO {
                 UserSessionData usd = objectMapper.readValue(message, UserSessionData.class);
                 usd.setSocket(client);
                 ActiveUsers.addUser(UUID.fromString(usd.getUuid()), usd, client);
+                ActiveUsers.getInbox(usd.getAccounts().getUsername());
             }
         });
     }
@@ -100,6 +105,27 @@ class ServerSocketIO {
             public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
                 Message global_msg = objectMapper.readValue(message,Message.class);
                 ActiveUsers.sendGlobalMessage(global_msg);
+            }
+        });
+    }
+
+    private void privateChat(){
+        server.addEventListener("private-message", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
+                PrivateMessage private_msg = objectMapper.readValue(message,PrivateMessage.class);
+                ActiveUsers.sendPrivateMessage(private_msg);
+
+            }
+        });
+    }
+
+    private void clearChat(){
+        server.addEventListener("remove-chat", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
+                PrivateMessage chet_remove = objectMapper.readValue(message,PrivateMessage.class);
+                ActiveUsers.removeChat(chet_remove.getUsername(),chet_remove.getMessageTo());
             }
         });
     }

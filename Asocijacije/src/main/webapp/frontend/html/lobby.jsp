@@ -29,163 +29,223 @@
             <img src="../images/logo/logo.png">
         </div>
         <div class="lobby-page">
-            <div class="lobby-page-personal-info">
-                <div>
-                    <img class="character" src="../images/characters/<%=account.getCharacter()%>.png">
+            <div class="lobby-page-left">
+                <!-- Personal info -->
+                <div class="lobby-page-personal-info">
+                    <div>
+                        <img class="character" src="../images/characters/<%=account.getCharacter()%>.png">
+                        <!-- <img class="character" src="../images/characters/7.png"> -->
+                    </div>
+                    <div class="lobby-page-personal-info-info">
+                        <!-- <p>Korisničko ime: <span>Bogdan Lukic</span></p> -->
+                        <!-- <p>Email: <span>bogdanlukic2002@gmail.com</span></p> -->
+                        <!-- <p>Trenutni rezultat: <span>140</span></p> -->
+                        <p>Korisničko ime: <span><%=account.getUsername()%></span></p>
+                        <p>Email: <span><%=account.getEmail()%></span></p>
+                        <p>Trenutni rezultat: <span></span></p>
+                    </div>
                 </div>
-                <div class="lobby-page-personal-info-info">
-                    <p>Korisničko ime: <span><%=account.getUsername()%></span></p>
-                    <p>Email: <span><%=account.getEmail()%></span></p>
-                    <p>Trenutni rezultat: <span></span></p>
+
+                <!-- CHAT -->
+                <div class="chat-field">
+                    <div id="chat-field-heder" class="chat-field-heder">
+                        <div onclick="setChat('global')" id="global-chat" class="active">
+                            <p>Global chat</p>
+                        </div>
+
+                        <div class="no-active global-active" id="private-chat">
+                            <!-- <div onclick="setChat('private')" class="new-message-open">
+                                <div>
+                                    <img src="../images/characters/2.png">
+                                </div>
+                                <div>
+                                    <p>Bogdan Lukic</p>
+                                </div>
+                            </div> -->
+                        </div>
+
+                    </div>
+
+                    <div id="chat-message" class="chat-message">
+                        <div class="welcome-msg">
+                            <p>Dobrodošli u naš grupni chat za igru asocijacije!</p>
+                        </div>
+                        <!-- <div class="chat-message-one">
+                            <div>
+                                <p class="chat-message-username">Server:</p>
+                            </div>
+                            <div class="chat-message-msg">
+                                <p>Dobrodošli na server</p>
+                            </div>
+                        </div> -->
+                    </div>
+                    
+                    <div id="private-chat-message" style="display: none;" class="chat-message">
+                        <div class="welcome-msg">
+                            <p>Sve poruke će biti obrisane nakon izlaska iz privatnog chat-a! </p>
+                        </div>
+                        <!-- <div class="chat-message-one">
+                            <div>
+                                <p class="chat-message-username">Server:</p>
+                            </div>
+                            <div class="chat-message-msg">
+                                <p>Dobrodošli na server</p>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="chat-insert">
+                        <div class="chat-insert-input">
+                            <input id="new_msg" type="text" class="input-classic input-classic-bs" placeholder="Text...">
+                        </div>
+                        <div>
+                            <div class="play-button-solo" onclick="sendMsg()">
+                                <p class="txt-shadow">Pošalji</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="lobby-page-row">
-                <div class="place">
-                    <p>Aktivni korisnici:</p>
-                    <div class="active-users-field" id="active-users">
-                        <!-- <div class="active-user">
-                            <div>
-                                <img class="active-user-character" src="../images/characters/0.png">
+            
+            <!-- ROW -->
+            <div class="lobby-page-right">
+                <div class="lobby-page-row">
+                    <div class="place">
+                        <p>Aktivni korisnici:</p>
+                        <div class="active-users-field" id="active-users">
+                            <!-- <div class="active-user">
+                                <div>
+                                    <img class="active-user-character" src="../images/characters/0.png">
+                                </div>
+                                <div class="active-user-info">
+                                    <div>
+                                        <p>Pera Peric</p>
+                                    </div>
+                                    <div class="active-user-info-status">
+                                        <div class="dot free"></div>
+                                        <p>Spreman za igru</p>
+                                    </div>
+                                </div>
+                                <div class="active-user-options">
+                                    <div class="clicable" onclick="startPrivateMessaging('a')">
+                                        <img src="../images/icons/message.png">
+                                    </div>
+                                    <div class="clicable">
+                                        <img src="../images/icons/sword-on.png">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="active-user-info">
+                            <div class="active-user">
                                 <div>
-                                    <p>Pera Peric</p>
+                                    <img class="active-user-character" src="../images/characters/4.png">
                                 </div>
-                                <div class="active-user-info-status">
-                                    <div class="dot free"></div>
-                                    <p>Spreman za igru</p>
+                                <div class="active-user-info">
+                                    <div>
+                                        <p>Zika Zikic</p>
+                                    </div>
+                                    <div class="active-user-info-status">
+                                        <div class="dot in-game"></div>
+                                        <p>Već u igri</p>
+                                    </div>
+                                </div>
+                                <div class="active-user-options">
+                                    <div class="clicable">
+                                        <img src="../images/icons/message.png">
+                                    </div>
+                                    <div>
+                                        <img src="../images/icons/sword-off.png">
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="place">
+                        <p>Najbolji rezultati:</p>
+                        <div class="active-users-field">
+                            <div class="active-user">
+                                <div>
+                                    <img class="active-user-character" src="../images/characters/4.png">
+                                </div>
+                                <div class="active-user-info">
+                                    <div>
+                                        <p>Pera Peric</p>
+                                    </div>
+                                    <div class="active-user-info-status">
+                                        <p>Trenutno najbolji rezultat: <span>430</span></p>
+                                    </div>
+                                </div>
+                                <div class="active-user-options">
+                                    <div>
+                                        <img src="../images/icons/first place.png">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="active-user-options">
+                            <div class="active-user">
                                 <div>
-                                    <img src="../images/icons/message.png">
+                                    <img class="active-user-character" src="../images/characters/2.png">
                                 </div>
+                                <div class="active-user-info">
+                                    <div>
+                                        <p>Uka Ukic </p>
+                                    </div>
+                                    <div class="active-user-info-status">
+                                        <p>Trenutno najbolji rezultat: <span>430</span></p>
+                                    </div>
+                                </div>
+                                <div class="active-user-options">
+                                    <div>
+                                        <img src="../images/icons/second place.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="active-user">
                                 <div>
-                                    <img src="../images/icons/sword-on.png">
+                                    <img class="active-user-character" src="../images/characters/6.png">
+                                </div>
+                                <div class="active-user-info">
+                                    <div>
+                                        <p>Bogdan Lukic</p>
+                                    </div>
+                                    <div class="active-user-info-status">
+                                        <p>Trenutno najbolji rezultat: <span>430</span></p>
+                                    </div>
+                                </div>
+                                <div class="active-user-options">
+                                    <div>
+                                        <img src="../images/icons/third place.png">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="active-user">
+                    </div>
+                </div>
+
+
+                <div class="list-message">
+                    <div>
+                        <p>Neotvorene poruke:</p>
+                    </div>
+                    <div class="list-message-list" id="field_of_list_messages">
+                        <!-- <div class="new-message">
                             <div>
-                                <img class="active-user-character" src="../images/characters/4.png">
+                                <img src="../images/characters/2.png">
                             </div>
-                            <div class="active-user-info">
-                                <div>
-                                    <p>Zika Zikic</p>
-                                </div>
-                                <div class="active-user-info-status">
-                                    <div class="dot in-game"></div>
-                                    <p>Već u igri</p>
-                                </div>
+                            <div>
+                                <p>Bogdan Lukic</p>
                             </div>
-                            <div class="active-user-options">
-                                <div>
-                                    <img src="../images/icons/message.png">
-                                </div>
-                                <div>
-                                    <img src="../images/icons/sword-off.png">
-                                </div>
+                            <div class="new-message-num">
+                                <p>4</p>
                             </div>
                         </div> -->
                     </div>
                 </div>
-                <div class="place">
-                    <p>Najbolji rezultati:</p>
-                    <div class="active-users-field">
-                        <div class="active-user">
-                            <div>
-                                <img class="active-user-character" src="../images/characters/4.png">
-                            </div>
-                            <div class="active-user-info">
-                                <div>
-                                    <p>Pera Peric</p>
-                                </div>
-                                <div class="active-user-info-status">
-                                    <p>Trenutno najbolji rezultat: <span>430</span></p>
-                                </div>
-                            </div>
-                            <div class="active-user-options">
-                                <div>
-                                    <img src="../images/icons/first place.png">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="active-user">
-                            <div>
-                                <img class="active-user-character" src="../images/characters/2.png">
-                            </div>
-                            <div class="active-user-info">
-                                <div>
-                                    <p>Uka Ukic </p>
-                                </div>
-                                <div class="active-user-info-status">
-                                    <p>Trenutno najbolji rezultat: <span>430</span></p>
-                                </div>
-                            </div>
-                            <div class="active-user-options">
-                                <div>
-                                    <img src="../images/icons/second place.png">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="active-user">
-                            <div>
-                                <img class="active-user-character" src="../images/characters/6.png">
-                            </div>
-                            <div class="active-user-info">
-                                <div>
-                                    <p>Bogdan Lukic</p>
-                                </div>
-                                <div class="active-user-info-status">
-                                    <p>Trenutno najbolji rezultat: <span>430</span></p>
-                                </div>
-                            </div>
-                            <div class="active-user-options">
-                                <div>
-                                    <img src="../images/icons/third place.png">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
-        </div>
-        <!-- CHAT -->
-        <div class="chat-field">
-            <div class="chat-field-heder">
-                <div class="active">
-                    <p>Global chat</p>
-                </div>
-                <div class="no-active">
-                </div>
-            </div>
-            <div id="chat-message" class="chat-message">
-                <div class="welcome-msg">
-                    <p>Dobrodošli u naš grupni chat za igru asocijacije!</p>
-                </div>
-                <!-- <div class="chat-message-one">
-                    <div>
-                        <p class="chat-message-username">Server:</p>
-                    </div>
-                    <div class="chat-message-msg">
-                        <p>Dobrodošli na server</p>
-                    </div>
-                </div> -->
-            </div>
-            <div class="chat-insert">
-                <div class="chat-insert-input">
-                    <input id="new_msg" type="text" class="input-classic input-classic-bs" placeholder="Text...">
-                </div>
-                <div>
-                    <div class="play-button-solo" onclick="sendGlobalMsg()">
-                        <p class="txt-shadow">Pošalji</p>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 
-<script src="../js/lobby.js"></script>
-<script src="../js/Socket/WebSocket.js"></script>
-  </body>
+    <script src="../js/lobby.js"></script>
+    <script src="../js/Socket/WebSocket.js"></script>
+</body>
 </html>
