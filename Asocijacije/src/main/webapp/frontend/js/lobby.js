@@ -220,3 +220,27 @@ function setFieldOfListMessages_loop(list_unreader_messages){
     }
     field_of_list_messages.innerHTML = plain_html;
 }
+
+// ==========================================
+
+function invite_response(x){
+    
+}
+
+overlay = document.querySelector("#overlay");
+
+function open_overlay(){
+    overlay.style.display = 'flex';
+    overlay.classList.add('scale-in-center');
+    setTimeout(() => {
+        overlay.classList.remove("scale-in-center");
+    }, 600);
+}
+function close_invite(){
+    overlay.classList.add('scale-out-center');
+    setTimeout(() => {
+        overlay.classList.remove("scale-out-center");
+        overlay.style.display = 'none';
+    }, 1000);
+    
+}
