@@ -1,4 +1,4 @@
-<!-- <%@ page import="Entities.Accounts" %>
+<%@ page import="Entities.Accounts" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
@@ -7,7 +7,7 @@
         return;
     }
     Accounts account = (Accounts) session.getAttribute("token");
-%> -->
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,8 +25,8 @@
     <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
 </head>
   <body onload="init()">
-    <div id="overlay" style="display: none;">
-        <div class="invite">
+    <div id="overlay" style="display: none; color: white;">
+        <!-- <div class="invite">
             <div>
                 <img src="../images/characters/6.png">
             </div>
@@ -38,11 +38,12 @@
                 <div class="invire-response-field accept clicable" onclick="close_invite()">
                     <i class="bi bi-check2"></i>
                 </div>
+                <div><div id="app"></div></div>
                 <div class="invire-response-field denied clicable" onclick="close_invite()">
                     <i class="bi bi-x"></i>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <div id="bodyContainer">
@@ -58,12 +59,12 @@
                         <!-- <img class="character" src="../images/characters/7.png"> -->
                     </div>
                     <div class="lobby-page-personal-info-info">
-                        <!-- <p>Korisničko ime: <span>Bogdan Lukic</span></p> -->
-                        <!-- <p>Email: <span>bogdanlukic2002@gmail.com</span></p> -->
-                        <!-- <p>Trenutni rezultat: <span>140</span></p> -->
-                        <p>Korisničko ime: <span><%=account.getUsername()%></span></p>
-                        <p>Email: <span><%=account.getEmail()%></span></p>
-                        <p>Trenutni rezultat: <span></span></p>
+                        <!-- <p>Korisničko ime: <span>Bogdan Lukic</span></p>
+                        <p>Email: <span>bogdanlukic2002@gmail.com</span></p>
+                        <p>Trenutni rezultat: <span>140</span></p> -->
+                       <p>Korisničko ime: <span><%=account.getUsername()%></span></p>
+                       <p>Email: <span><%=account.getEmail()%></span></p>
+                       <p>Trenutni rezultat: <span></span></p>
                     </div>
                 </div>
 
@@ -134,7 +135,7 @@
                     <div class="place">
                         <p>Aktivni korisnici:</p>
                         <div class="active-users-field" id="active-users">
-                            <div class="active-user">
+                            <!-- <div class="active-user">
                                 <div>
                                     <img class="active-user-character" src="../images/characters/0.png">
                                 </div>
@@ -173,11 +174,16 @@
                                     <div class="clicable">
                                         <img src="../images/icons/message.png">
                                     </div>
-                                    <div>
+                                    <div id="swords" class="clicable" onclick="add_dots()">
                                         <img src="../images/icons/sword-off.png">
                                     </div>
+                                    <div id="loader" class="loader" style="display: none;">
+                                        <span class="loader__dot">.</span>
+                                        <span class="loader__dot">.</span>
+                                        <span class="loader__dot">.</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="place">

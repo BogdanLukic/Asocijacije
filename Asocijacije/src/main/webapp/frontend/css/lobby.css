@@ -351,8 +351,9 @@
     display: flex;
     flex-direction: column;
     background-color: var(--color-green);
-    max-width: 40%;
-    min-width: 30%;
+    max-width: 30%;
+    min-width: 25%;
+    /* min-width: 350px; */
     justify-content: center;
     align-items: center;
     border-radius: var(--border-radius);
@@ -380,6 +381,7 @@
     flex-direction: row;
     justify-content: center;
     column-gap: 30px;
+    align-items: center;
 }
 .invire-response-field{
     font-size: 35px;
@@ -397,6 +399,7 @@
 }
 .invire-response-field > i{
     padding: 0px 7px 7px 7px;
+    color: white;
 }
 .accept{
     background-color: var(--color-free-in-lobby);
@@ -465,3 +468,82 @@
     }
   }
   
+
+  /* ============= */
+  body {
+    font-family: sans-serif;
+    display: grid;
+    height: 100vh;
+    place-items: center;
+  }
+  
+  .base-timer {
+    position: relative;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .base-timer__svg {
+    transform: scaleX(-1);
+  }
+  
+  .base-timer__circle {
+    fill: none;
+    stroke: none;
+  }
+  
+  .base-timer__path-elapsed {
+    stroke-width: 7px;
+    stroke: grey;
+  }
+  
+  .base-timer__path-remaining {
+    stroke-width: 7px;
+    stroke-linecap: round;
+    transform: rotate(90deg);
+    transform-origin: center;
+    transition: 1s linear all;
+    fill-rule: nonzero;
+    stroke: currentColor;
+  }
+  
+  .base-timer__path-remaining.green {
+    color: rgb(65, 184, 131);
+  }
+  
+  .base-timer__path-remaining.orange {
+    color: orange;
+  }
+  
+  .base-timer__path-remaining.red {
+    color: red;
+  }
+  
+  .base-timer__label {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+  }
+
+  /* Loader */
+  /* ======================== */
+    #loader{
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    }
+    @keyframes blink {50% { color: transparent }}
+    .loader__dot { animation: 1s blink infinite }
+    .loader__dot:nth-child(2) { animation-delay: 250ms }
+    .loader__dot:nth-child(3) { animation-delay: 500ms }
+    /* X - response */
+    .x{
+        color: var(--color-in-game-lobby);
+        font-size: 40px;
+        padding-bottom: 9px;
+    }

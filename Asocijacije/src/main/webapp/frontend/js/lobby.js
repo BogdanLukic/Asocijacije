@@ -30,8 +30,16 @@ function setActiveUsers(list){
                 <div onclick="startPrivateMessaging('${encodedElementJSON}')" class='clicable'>
                     <img src="../images/icons/message.png">
                 </div>
-                <div>
+                <div id="swords-${element.username}" class="clicable" onclick="add_dots('${encodedElementJSON}')">
                     <img src="../images/icons/sword-on.png">
+                </div>
+                <div id="loader-${element.username}" class="loader" style="display: none;">
+                    <span class="loader__dot">.</span>
+                    <span class="loader__dot">.</span>
+                    <span class="loader__dot">.</span>
+                </div>
+                <div id="x-${element.username}" class="x" style="display: none;">
+                    <i class="bi bi-x"></i>
                 </div>
             </div>
         </div>`;
@@ -221,26 +229,243 @@ function setFieldOfListMessages_loop(list_unreader_messages){
     field_of_list_messages.innerHTML = plain_html;
 }
 
+// Timer
 // ==========================================
-
-function invite_response(x){
-    
-}
-
 overlay = document.querySelector("#overlay");
-
+enemy_save = '';
+function setOverlay(obj){
+    enemy_save = obj;
+    overlay.innerHTML = ` <div class="invite">
+                            <div>
+                                <img src="../images/characters/${obj.character}.png">
+                            </div>
+                            <div class="invite-info">
+                                <h3>${obj.username}</h3>
+                                <p>te izaziva na borbu</p>
+                            </div>
+                            <div class="invire-response">
+                                <div class="invire-response-field accept clicable" onclick="acceptChallenge()">
+                                    <i class="bi bi-check2"></i>
+                                </div>
+                                <div><div id="app"></div></div>
+                                <div class="invire-response-field denied clicable" onclick="declineChallenge()">
+                                    <i class="bi bi-x"></i>
+                                </div>
+                            </div>
+                        </div>`;
+    open_overlay();
+}
+var back_interval = null; 
 function open_overlay(){
+    startTimer();
     overlay.style.display = 'flex';
     overlay.classList.add('scale-in-center');
+    
     setTimeout(() => {
         overlay.classList.remove("scale-in-center");
     }, 600);
+
+    back_interval = setTimeout(() => {
+        close_invite();
+    }, TIME_LIMIT*1000);
 }
 function close_invite(){
     overlay.classList.add('scale-out-center');
     setTimeout(() => {
         overlay.classList.remove("scale-out-center");
         overlay.style.display = 'none';
-    }, 1000);
-    
+    }, 600);
+    clearInterval(back_interval); 
+    restartTimer();
+}
+
+
+let FULL_DASH_ARRAY = 283;
+let WARNING_THRESHOLD = 10;
+let ALERT_THRESHOLD = 5;
+
+const COLOR_CODES = {
+  info: {
+    color: "green"
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD
+  }
+};
+
+const TIME_LIMIT = 15;
+let timePassed = 0;
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let remainingPathColor = COLOR_CODES.info.color;
+
+function onTimesUp() {
+  clearInterval(timerInterval);
+}
+
+function startTimer() {
+    document.getElementById("app").innerHTML = `
+    <div class="base-timer">
+    <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g class="base-timer__circle">
+        <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+        <path
+            id="base-timer-path-remaining"
+            stroke-dasharray="283"
+            class="base-timer__path-remaining ${remainingPathColor}"
+            d="
+            M 50, 50
+            m -45, 0
+            a 45,45 0 1,0 90,0
+            a 45,45 0 1,0 -90,0
+            "
+        ></path>
+        </g>
+    </svg>
+    <span id="base-timer-label" class="base-timer__label">${formatTime(
+        timeLeft
+    )}</span>
+    </div>
+    `;
+  timerInterval = setInterval(() => {
+    timePassed = timePassed += 1;
+    timeLeft = TIME_LIMIT - timePassed;
+    document.getElementById("base-timer-label").innerHTML = formatTime(timeLeft);
+    setCircleDasharray();
+    setRemainingPathColor(timeLeft);
+    if (timeLeft <= 0) {
+      onTimesUp();
+    }
+  }, 1000);
+}
+
+function restartTimer(){
+        clearInterval(timerInterval);
+        document.getElementById("app").innerHTML = ``;
+        FULL_DASH_ARRAY = 283;
+        WARNING_THRESHOLD = 10;
+        ALERT_THRESHOLD = 5;
+        timePassed = 0;
+        timeLeft = TIME_LIMIT;
+        timerInterval = null;
+        remainingPathColor = COLOR_CODES.info.color;
+}
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+
+  return `${seconds}`;
+}
+
+function setRemainingPathColor(timeLeft) {
+  const { alert, warning, info } = COLOR_CODES;
+  if (timeLeft <= alert.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(warning.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(alert.color);
+  } else if (timeLeft <= warning.threshold) {
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.remove(info.color);
+    document
+      .getElementById("base-timer-path-remaining")
+      .classList.add(warning.color);
+  }
+}
+
+function calculateTimeFraction() {
+  const rawTimeFraction = timeLeft / TIME_LIMIT;
+  return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+}
+
+function setCircleDasharray() {
+  const circleDasharray = `${(
+    calculateTimeFraction() * FULL_DASH_ARRAY
+  ).toFixed(0)} 283`;
+  document
+    .getElementById("base-timer-path-remaining")
+    .setAttribute("stroke-dasharray", circleDasharray);
+}
+
+// =========================================================
+function add_dots(enemy){
+    enemy = decodeURIComponent(enemy);
+    enemy = JSON.parse(enemy);
+
+    sword = document.querySelector(`#swords-${enemy.username}`);
+    loader = document.querySelector(`#loader-${enemy.username}`);
+
+    sword.style = 'display: none';  
+    loader.style.display = '';
+
+    obj = new Object();
+    obj.challenger = account_information;
+    obj.enemy = enemy;
+
+    sendInvate(obj);
+}
+
+// function remove_dots(obj){
+//     sword = document.querySelector(`#swords-${obj.enemy}`);
+//     loader = document.querySelector(`#loader-${obj.enemy}`);
+//     switch(obj.response){
+//         case true:
+//             console.log('Krece mec');
+//             break;
+//         case false:
+//             loader.style = 'display: none';  
+//             sword.style.display = '';
+//             break;
+//     }
+// }
+
+function acceptChallenge(){
+    obj = new Object();
+    obj.challenger = enemy_save;
+    obj.enemy = account_information;
+    obj.response = true;
+    sendIviteResponse(obj);
+    close_invite();
+}
+
+function declineChallenge(){
+    obj = new Object();
+    obj.challenger = enemy_save;
+    obj.enemy = account_information;
+    obj.response = false;
+    sendIviteResponse(obj);
+    close_invite();
+}
+
+function responseChallenge(obj){
+    if(obj.response){
+        // approved challenge
+    }
+    else{
+        // declined challenge
+        loader = document.querySelector(`#loader-${obj.enemy.username}`);
+        x = document.querySelector(`#x-${obj.enemy.username}`);
+        sword = document.querySelector(`#swords-${obj.enemy.username}`);
+
+        loader.style.display='none';
+        x.style.display = '';
+
+        setTimeout(()=>{
+            x.style.display = 'none';
+            sword.style.display = '';
+        },2500);
+    }
 }

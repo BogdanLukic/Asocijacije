@@ -1,10 +1,7 @@
 package Socket;
 
 import Entities.Accounts;
-import Models.Inbox;
-import Models.Message;
-import Models.PrivateMessage;
-import Models.UserSessionData;
+import Models.*;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -131,5 +128,34 @@ class ActiveUsers {
             e.printStackTrace();
         }
     }
+
+    public static void sendInvite(Challenge challenge){
+        for (Map.Entry<UUID,UserSessionData> entry: list_of_active_users.entrySet()) {
+            if(entry.getValue().getAccounts().getId() == challenge.getEnemy().getId()){
+                SocketIOClient socket = entry.getValue().getSocket();
+                try{
+                    socket.sendEvent("challenge",objectMapper.writeValueAsString(challenge.getChallenger()));
+                }
+                catch (Exception e) {e.printStackTrace();}
+            }
+        }
+    }
+    public static void responseInvite(Challenge challenge){
+        if(challenge.isResponse()){
+           System.out.println("Potvrdio");
+        }
+        else {
+            SocketIOClient socket = getSocketPerUsername(challenge.getChallenger().getUsername());
+            try{
+                socket.sendEvent("challenge-response",objectMapper.writeValueAsString(challenge));
+                System.out.println("Poslao");
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
 }

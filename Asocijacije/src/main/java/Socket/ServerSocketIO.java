@@ -1,10 +1,7 @@
 package Socket;
 
 import Entities.Accounts;
-import Models.Inbox;
-import Models.Message;
-import Models.PrivateMessage;
-import Models.UserSessionData;
+import Models.*;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -74,6 +71,8 @@ class ServerSocketIO {
         globalChat();
         privateChat();
         clearChat();
+        challenge();
+        challengeResponse();
     }
     ObjectMapper objectMapper = new ObjectMapper();
     private void register(){
@@ -126,6 +125,24 @@ class ServerSocketIO {
             public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
                 PrivateMessage chet_remove = objectMapper.readValue(message,PrivateMessage.class);
                 ActiveUsers.removeChat(chet_remove.getUsername(),chet_remove.getMessageTo());
+            }
+        });
+    }
+    private void challenge(){
+        server.addEventListener("challenge", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
+                Challenge challenge = objectMapper.readValue(message,Challenge.class);
+                ActiveUsers.sendInvite(challenge);
+            }
+        });
+    }
+    private void challengeResponse(){
+        server.addEventListener("challenge-response", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
+                Challenge challenge = objectMapper.readValue(message,Challenge.class);
+                ActiveUsers.responseInvite(challenge);
             }
         });
     }

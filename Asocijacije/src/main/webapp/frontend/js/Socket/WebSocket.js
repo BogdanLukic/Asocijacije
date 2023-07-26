@@ -126,12 +126,27 @@ function clearChat(username,msgTo){
     socket.emit("remove-chat",JSON.stringify(obj));
 }
 
+var timer = '';
+function sendInvate(obj){
+    socket.emit("challenge",JSON.stringify(obj));
+    timer = setTimeout(()=>{
+        obj.response = false;
+        responseChallenge(obj);
+    },15500)
+}
+
+function sendIviteResponse(obj){
+    socket.emit("challenge-response",JSON.stringify(obj));
+}
+
 // EVENTS
 // ===========================================================================
 function addEvents(){
     getListOfActiveUsersEvent();
     globalMsg();
     privateMsg();
+    challengeEvent();
+    challengeResponesEvent();
 }
 
 function getListOfActiveUsersEvent(){
@@ -180,5 +195,20 @@ function privateMsgChat(){
             obj.messageTo = data.username;
             socket.emit("remove-chat",JSON.stringify(obj));
         }
+    })
+}
+
+function challengeEvent(){
+    socket.on('challenge',(data)=>{
+        data = JSON.parse(data);
+        setOverlay(data);
+    });
+}
+
+function challengeResponesEvent(){
+    socket.on('challenge-response',(data)=>{
+        data=JSON.parse(data);
+        clearTimeout(timer);
+        responseChallenge(data);
     })
 }
