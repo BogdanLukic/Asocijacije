@@ -2,11 +2,15 @@ package Models;
 
 import Entities.Accounts;
 
-public class Challenge {
+import java.io.Serializable;
+import java.util.UUID;
+
+public class Challenge implements Serializable {
     private Accounts challenger;
     private Accounts enemy;
 
     private boolean response;
+    private UUID uuid;
 
     public Accounts getChallenger() {
         return challenger;
@@ -30,5 +34,13 @@ public class Challenge {
 
     public void setResponse(boolean response) {
         this.response = response;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 }

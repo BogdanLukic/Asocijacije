@@ -2,10 +2,12 @@ package Socket;
 
 import Entities.Accounts;
 import Models.*;
+import RMI.IEngine;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 class ActiveUsers {
@@ -140,20 +142,45 @@ class ActiveUsers {
             }
         }
     }
-    public static void responseInvite(Challenge challenge){
+    public static void responseInvite(IEngine engine, Challenge challenge){
         if(challenge.isResponse()){
-           System.out.println("Potvrdio");
+            System.out.println("Potvrdio");
+
+            UUID uuid = UUID.randomUUID();
+            SocketIOClient socket_chalanger = getSocketPerUsername(challenge.getChallenger().getUsername());
+            SocketIOClient socket_enemy = getSocketPerUsername(challenge.getEnemy().getUsername());
+            challenge.setUuid(uuid);
+            try{
+                socket_chalanger.sendEvent("challenge-response",objectMapper.writeValueAsString(challenge));
+                socket_enemy.sendEvent("challenge-response",objectMapper.writeValueAsString(challenge));
+                engine.createNewGame(uuid,challenge);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
         else {
             SocketIOClient socket = getSocketPerUsername(challenge.getChallenger().getUsername());
             try{
                 socket.sendEvent("challenge-response",objectMapper.writeValueAsString(challenge));
-                System.out.println("Poslao");
             }
             catch (Exception e){
                 e.printStackTrace();
             }
 
+        }
+    }
+    public static void sendTurn(RequestedField requested_field, Challenge challenge){
+        SocketIOClient socket_chalanger = getSocketPerUsername(challenge.getChallenger().getUsername());
+        SocketIOClient socket_enemy = getSocketPerUsername(challenge.getEnemy().getUsername());
+
+        try{
+            System.out.println(objectMapper.writeValueAsString(requested_field));
+            socket_chalanger.sendEvent("send-turn",objectMapper.writeValueAsString(requested_field));
+            socket_enemy.sendEvent("send-turn",objectMapper.writeValueAsString(requested_field));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

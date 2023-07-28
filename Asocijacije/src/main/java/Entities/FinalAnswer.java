@@ -2,17 +2,12 @@ package Entities;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-
 @Entity
-@Table(name = "roles")
-public class Role implements Serializable {
-
+@Table(name = "konacno_resenje")
+public class FinalAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(nullable = false)
     private String name;
 
     public int getId() {

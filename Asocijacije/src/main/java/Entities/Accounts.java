@@ -2,9 +2,11 @@ package Entities;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name="accounts")
-public class Accounts {
+public class Accounts implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,8 @@ public class Accounts {
 
     @Column(nullable = false)
     private int character_id;
+
+    private boolean status;
 
     public Accounts() {
     }
@@ -77,5 +81,20 @@ public class Accounts {
         this.character_id = character_id;
     }
 
+    public int getCharacter_id() {
+        return character_id;
+    }
+
+    public void setCharacter_id(int character_id) {
+        this.character_id = character_id;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }
 

@@ -2,6 +2,7 @@ package Socket;
 
 import Entities.Accounts;
 import Models.*;
+import RMI.IEngine;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -12,6 +13,7 @@ import com.corundumstudio.socketio.listener.DisconnectListener;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.rmi.Naming;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -21,12 +23,21 @@ class ServerSocketIO {
     private static Configuration config;
     private static SocketIOServer server;
 
+    private static IEngine engine;
+
     private static ServerSocketIO my_server;
 
     private void setConfiguration(){
         config = new Configuration();
         config.setHostname("localhost");
         config.setPort(2020);
+        try{
+            engine = (IEngine) Naming.lookup("rmi://localhost:5353/engine");
+        }
+        catch (Exception e){
+            System.out.println("RMI nije pokrenut, pokrenuti StartRMI");
+        }
+
     }
     private void setConnectionListener(){
         server.addConnectListener(new ConnectListener() {
@@ -73,6 +84,8 @@ class ServerSocketIO {
         clearChat();
         challenge();
         challengeResponse();
+
+        getLabel();
     }
     ObjectMapper objectMapper = new ObjectMapper();
     private void register(){
@@ -85,6 +98,18 @@ class ServerSocketIO {
                 ActiveUsers.getInbox(usd.getAccounts().getUsername());
             }
         });
+
+        server.addEventListener("registerGame", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient client, String message, AckRequest ackRequest) throws Exception {
+                UserSessionData usd = objectMapper.readValue(message, UserSessionData.class);
+                usd.setSocket(client);
+                usd.getAccounts().setStatus(true);
+                ActiveUsers.addUser(UUID.fromString(usd.getUuid()), usd, client);
+                ActiveUsers.getInbox(usd.getAccounts().getUsername());
+            }
+        });
+
     }
     private void getListOfActiveUsers(){
         server.addEventListener("getListOfActiveUsers", String.class, new DataListener<String>() {
@@ -142,7 +167,22 @@ class ServerSocketIO {
             @Override
             public void onData(SocketIOClient socketIOClient, String message, AckRequest ackRequest) throws Exception {
                 Challenge challenge = objectMapper.readValue(message,Challenge.class);
-                ActiveUsers.responseInvite(challenge);
+                ActiveUsers.responseInvite(engine,challenge);
+            }
+        });
+    }
+
+//    IN-GAME
+//    ==============================
+    private void getLabel(){
+        server.addEventListener("get-label", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String string, AckRequest ackRequest) throws Exception {
+                RequestedField requestedField = objectMapper.readValue(string,RequestedField.class);
+                System.out.println("Pogodjen" + objectMapper.writeValueAsString(requestedField));
+                requestedField.setText(engine.getTextFromPlace(requestedField));
+                Challenge challenge = engine.getPlayers(requestedField.getUuid());
+                ActiveUsers.sendTurn(requestedField,challenge);
             }
         });
     }

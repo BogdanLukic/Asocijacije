@@ -18,7 +18,9 @@ function getConnection(){
         socket = io("ws://localhost:2020", { query: { sessionId } }); 
         console.log("Ponovo ste se prijavili");
     }
-    addEvents();
+    if(sessionStorage.uuid_of_game==null){
+        addEvents();
+    }
 }
 
 var account_information;
@@ -38,15 +40,19 @@ function getAccountInformations(){
             d=>{
                 sessionStorage.setItem("account_information",d.token);
                 account_information = JSON.parse(d.token);
-                register();
-                privateMsgChat();
+                if(sessionStorage.uuid_of_game==null){
+                    register();
+                    privateMsgChat();
+                }
             }
         )
     }
     else{
         account_information = JSON.parse(sessionStorage.getItem("account_information"));
-        register();
-        privateMsgChat();
+        if(sessionStorage.uuid_of_game==null){
+            register();
+            privateMsgChat();
+        }
     }
 }
 
@@ -207,6 +213,7 @@ function challengeEvent(){
 
 function challengeResponesEvent(){
     socket.on('challenge-response',(data)=>{
+        // console.log(data);
         data=JSON.parse(data);
         clearTimeout(timer);
         responseChallenge(data);

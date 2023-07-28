@@ -26,6 +26,12 @@
   --color-in-game-lobby:#C54938;
 
   --border-radius: 12px;
+
+  --border-color-red: #C22A2A;
+  --border-color-blue:#4A9FDD;
+
+  --button-yellow:#F7C843;
+
 }
 #bodyContainer {
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--backgroung-v2);

@@ -1,3 +1,5 @@
+if(sessionStorage.uuid_of_game)
+    window.open("party.html","_self");
 msg_input_field = document.querySelector("#new_msg");
 
 msg_input_field.addEventListener('keydown', function(event) {
@@ -7,13 +9,14 @@ msg_input_field.addEventListener('keydown', function(event) {
 
 function setActiveUsers(list){
     list = JSON.parse(list);
-    
+    console.log(list);
     var active_users_field = document.querySelector("#active-users");
     var str = "";
     list.forEach(element => {
         elementJSON = JSON.stringify(element);
         encodedElementJSON = encodeURIComponent(elementJSON);
-        str+=`<div class="active-user">
+        if(element.status == false){
+            str+=`<div class="active-user">
             <div>
                 <img class="active-user-character" src="../images/characters/${element.character}.png">
             </div>
@@ -43,6 +46,40 @@ function setActiveUsers(list){
                 </div>
             </div>
         </div>`;
+        }
+        else{
+            str+=`<div class="active-user">
+            <div>
+                <img class="active-user-character" src="../images/characters/${element.character}.png">
+            </div>
+            <div class="active-user-info">
+                <div>
+                    <p>${element.username}</p>
+                </div>
+                <div class="active-user-info-status">
+                    <div class="dot in-game"></div>
+                    <p>Već u igri</p>
+                </div>
+            </div>
+            <div class="active-user-options">
+                <div onclick="startPrivateMessaging('${encodedElementJSON}')" class='clicable'>
+                    <img src="../images/icons/message.png">
+                </div>
+                <div id="swords-${element.username}" class="clicable">
+                    <img src="../images/icons/sword-off.png">
+                </div>
+                <div id="loader-${element.username}" class="loader" style="display: none;">
+                    <span class="loader__dot">.</span>
+                    <span class="loader__dot">.</span>
+                    <span class="loader__dot">.</span>
+                </div>
+                <div id="x-${element.username}" class="x" style="display: none;">
+                    <i class="bi bi-x"></i>
+                </div>
+            </div>
+        </div>`;
+        }
+        
     });
     active_users_field.innerHTML = str;
 }
@@ -453,6 +490,10 @@ function declineChallenge(){
 function responseChallenge(obj){
     if(obj.response){
         // approved challenge
+        uuid_of_game = obj.uuid;
+        sessionStorage.setItem("uuid_of_game",uuid_of_game);
+        window.open("party.html","_self");
+        
     }
     else{
         // declined challenge

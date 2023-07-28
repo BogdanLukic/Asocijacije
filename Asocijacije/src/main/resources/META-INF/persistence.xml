@@ -16,4 +16,21 @@
 
         </properties>
     </persistence-unit>
+
+    <persistence-unit name="asocijacije_rmi" transaction-type="RESOURCE_LOCAL">
+
+        <class>Entities.Column_A</class>
+        <class>Entities.Column_B</class>
+        <class>Entities.Column_C</class>
+        <class>Entities.Column_D</class>
+        <class>Entities.FinalAnswer</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/asocijacije_rmi" />
+            <property name="jakarta.persistence.jdbc.user" value="root" />
+            <property name="jakarta.persistence.jdbc.password" value="" />
+
+        </properties>
+    </persistence-unit>
 </persistence>
