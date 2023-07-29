@@ -3,6 +3,7 @@ function initParty(){
         window.open("lobby.jsp","_self");
     init();
     registerGame();
+    getGameStatus();
     addEventsParty();
 }
 function registerGame(){
@@ -28,14 +29,27 @@ function sendTurn(obj){
     socket.emit("get-label",JSON.stringify(obj));
 }
 
+function getGameStatus(){
+    obj = new Object();
+    obj.uuid = sessionStorage.getItem('uuid_of_game');
+    socket.emit("get-game-status",JSON.stringify(obj));
+}
+
 // EVENTS
 // ===========================================================================
 function addEventsParty(){
     reciveTurn();
+    reciveStatus();
 }
 function reciveTurn(){
     socket.on('send-turn',(data)=>{
         obj = JSON.parse(data);
         setTextInField(obj);
+    })
+}
+function reciveStatus(){
+    socket.on('send-game-status',(data)=>{
+        obj = JSON.parse(data);
+        setGameInfo(obj);
     })
 }

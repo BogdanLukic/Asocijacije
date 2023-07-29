@@ -1,10 +1,13 @@
 package Entities;
 
+import Models.EChallange;
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "resenje_kolona_c")
-public class Column_C {
+public class Column_C implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_konacno_resenje;
@@ -13,6 +16,8 @@ public class Column_C {
     private String two;
     private String three;
     private String four;
+    @Transient
+    private EChallange winner;
 
     public int getId_konacno_resenje() {
         return id_konacno_resenje;
@@ -75,5 +80,28 @@ public class Column_C {
             default:
                 return "";
         }
+    }
+    public void setTextOnPlace(String place, String text){
+        switch (place){
+            case "1":
+                setOne(text);
+                break;
+            case "2":
+                setTwo(text);
+                break;
+            case "3":
+                setThree(text);
+                break;
+            case "4":
+                setFour(text);
+                break;
+        }
+    }
+    public EChallange getWinner() {
+        return winner;
+    }
+
+    public void setWinner(EChallange winner) {
+        this.winner = winner;
     }
 }

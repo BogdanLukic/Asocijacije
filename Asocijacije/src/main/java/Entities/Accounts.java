@@ -28,6 +28,7 @@ public class Accounts implements Serializable {
     @Column(nullable = false)
     private int character_id;
 
+    @Transient
     private boolean status;
 
     public Accounts() {

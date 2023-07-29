@@ -1,12 +1,9 @@
-import Database.*;
-import Database.*;
 import Entities.*;
 import Models.Challenge;
-import Models.Game;
+import Models.GameAnswer;
 import RMI.IEngine;
 
 import java.rmi.Naming;
-import java.util.UUID;
 
 public class Test {
 
@@ -25,7 +22,7 @@ public class Test {
 //        System.out.println(db.numOfRows());
 
         try{
-            Game game = new Game();
+            GameAnswer gameAnswer = new GameAnswer();
             Challenge challenge = new Challenge();
             Accounts accounts = new Accounts();
             accounts.setPassword("password");
@@ -39,7 +36,7 @@ public class Test {
             challenge.setChallenger(accounts);
             challenge.setEnemy(accounts);
             challenge.setResponse(true);
-            game.setChallenge(challenge);
+            gameAnswer.setChallenge(challenge);
 
             IEngine engine = (IEngine) Naming.lookup("rmi://localhost:5353/engine");
 //            engine.createNewGame(UUID.randomUUID(),game);

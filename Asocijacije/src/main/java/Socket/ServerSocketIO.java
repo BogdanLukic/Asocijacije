@@ -84,8 +84,8 @@ class ServerSocketIO {
         clearChat();
         challenge();
         challengeResponse();
-
-        getLabel();
+        forwardPlayer();
+        forwardLabel();
     }
     ObjectMapper objectMapper = new ObjectMapper();
     private void register(){
@@ -174,12 +174,23 @@ class ServerSocketIO {
 
 //    IN-GAME
 //    ==============================
-    private void getLabel(){
+
+    private void forwardPlayer(){
+        server.addEventListener("get-game-status", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                Challenge challenge = objectMapper.readValue(s,Challenge.class);
+                GameStatus gameStatus = engine.getGameStatus(challenge.getUuid());
+                ActiveUsers.sendStatus(gameStatus);
+            }
+        });
+    }
+
+    private void forwardLabel(){
         server.addEventListener("get-label", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String string, AckRequest ackRequest) throws Exception {
                 RequestedField requestedField = objectMapper.readValue(string,RequestedField.class);
-                System.out.println("Pogodjen" + objectMapper.writeValueAsString(requestedField));
                 requestedField.setText(engine.getTextFromPlace(requestedField));
                 Challenge challenge = engine.getPlayers(requestedField.getUuid());
                 ActiveUsers.sendTurn(requestedField,challenge);

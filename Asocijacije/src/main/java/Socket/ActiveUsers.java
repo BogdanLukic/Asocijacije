@@ -144,8 +144,6 @@ class ActiveUsers {
     }
     public static void responseInvite(IEngine engine, Challenge challenge){
         if(challenge.isResponse()){
-            System.out.println("Potvrdio");
-
             UUID uuid = UUID.randomUUID();
             SocketIOClient socket_chalanger = getSocketPerUsername(challenge.getChallenger().getUsername());
             SocketIOClient socket_enemy = getSocketPerUsername(challenge.getEnemy().getUsername());
@@ -175,7 +173,6 @@ class ActiveUsers {
         SocketIOClient socket_enemy = getSocketPerUsername(challenge.getEnemy().getUsername());
 
         try{
-            System.out.println(objectMapper.writeValueAsString(requested_field));
             socket_chalanger.sendEvent("send-turn",objectMapper.writeValueAsString(requested_field));
             socket_enemy.sendEvent("send-turn",objectMapper.writeValueAsString(requested_field));
         }
@@ -184,5 +181,18 @@ class ActiveUsers {
         }
     }
 
+    public static void sendStatus(GameStatus gameStatus){
+
+        SocketIOClient socket_chalanger = getSocketPerUsername(gameStatus.getChallenge().getChallenger().getUsername());
+        SocketIOClient socket_enemy = getSocketPerUsername(gameStatus.getChallenge().getEnemy().getUsername());
+
+        try{
+            socket_chalanger.sendEvent("send-game-status",objectMapper.writeValueAsString(gameStatus));
+            socket_enemy.sendEvent("send-game-status",objectMapper.writeValueAsString(gameStatus));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

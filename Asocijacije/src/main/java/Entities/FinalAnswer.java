@@ -1,14 +1,19 @@
 package Entities;
 
+import Models.EChallange;
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 
 @Entity
 @Table(name = "konacno_resenje")
-public class FinalAnswer {
+public class FinalAnswer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    @Transient
+    private EChallange winner;
 
     public int getId() {
         return id;
@@ -24,5 +29,13 @@ public class FinalAnswer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public EChallange getWinner() {
+        return winner;
+    }
+
+    public void setWinner(EChallange winner) {
+        this.winner = winner;
     }
 }

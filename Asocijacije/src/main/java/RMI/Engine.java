@@ -2,9 +2,7 @@ package RMI;
 
 import Database.DatabaseAsocijacije;
 import Database.IDatabaseAsocijacije;
-import Models.Challenge;
-import Models.Game;
-import Models.RequestedField;
+import Models.*;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -15,13 +13,13 @@ import java.util.UUID;
 
 public class Engine extends UnicastRemoteObject implements IEngine{
 
-    private static Map<UUID, Game> in_game_list;
+    private static Map<UUID, GameAnswer> in_game_list;
     private IDatabaseAsocijacije databaseAsocijacije;
     private Random random;
 
     public Engine() throws RemoteException {
         super();
-        in_game_list = new HashMap<UUID, Game>();
+        in_game_list = new HashMap<UUID, GameAnswer>();
         databaseAsocijacije = DatabaseAsocijacije.getConnection();
         random = new Random();
     }
@@ -30,39 +28,56 @@ public class Engine extends UnicastRemoteObject implements IEngine{
         int num_of_row = databaseAsocijacije.numOfRows();
         int asocijacije = random.nextInt(num_of_row) + 1;
 
-        Game game = new Game();
-        game.setChallenge(challenge);
-        game.setAsocijacija(asocijacije);
-        game.setKolona_a(databaseAsocijacije.getKolonaA(asocijacije));
-        game.setKolona_b(databaseAsocijacije.getKolonaB(asocijacije));
-        game.setKolona_c(databaseAsocijacije.getKolonaC(asocijacije));
-        game.setKolona_d(databaseAsocijacije.getKolonaD(asocijacije));
-        game.setKonacno_resenje(databaseAsocijacije.getKonacnoResenje(asocijacije));
+        GameAnswer gameAnswer = new GameAnswer();
+        gameAnswer.setOn_turn(EChallange.challanger);
+        gameAnswer.setChallenge(challenge);
+        gameAnswer.setAsocijacija(asocijacije);
+        gameAnswer.setColumn_a(databaseAsocijacije.getKolonaA(asocijacije));
+        gameAnswer.setColumn_b(databaseAsocijacije.getKolonaB(asocijacije));
+        gameAnswer.setColumn_c(databaseAsocijacije.getKolonaC(asocijacije));
+        gameAnswer.setColumn_d(databaseAsocijacije.getKolonaD(asocijacije));
+        gameAnswer.setKonacno_resenje(databaseAsocijacije.getKonacnoResenje(asocijacije));
         synchronized (in_game_list){
-            in_game_list.put(uuid,game);
+            in_game_list.put(uuid, gameAnswer);
         }
     }
 
     @Override
     public String getTextFromPlace(RequestedField requested_field) throws RemoteException{
-        Game game = in_game_list.get(requested_field.getUuid());
-        System.out.println("USAO");
+        GameAnswer gameAnswer = in_game_list.get(requested_field.getUuid());
+        String text;
         switch (requested_field.getColumn()){
             case "a":
-                return game.getKolona_a().getTextFromPlace(requested_field.getPlace());
+                text = gameAnswer.getColumn_a().getTextFromPlace(requested_field.getPlace());
+                gameAnswer.getStatus_column_a().setTextOnPlace(requested_field.getPlace(), text);
+                return text;
             case "b":
-                return game.getKolona_b().getTextFromPlace(requested_field.getPlace());
+                text = gameAnswer.getColumn_b().getTextFromPlace(requested_field.getPlace());
+                gameAnswer.getStatus_column_b().setTextOnPlace(requested_field.getPlace(), text);
+                return text;
             case "c":
-                return game.getKolona_c().getTextFromPlace(requested_field.getPlace());
+                text = gameAnswer.getColumn_c().getTextFromPlace(requested_field.getPlace());
+                gameAnswer.getStatus_column_c().setTextOnPlace(requested_field.getPlace(), text);
+                return text;
             case "d":
-                return game.getKolona_d().getTextFromPlace(requested_field.getPlace());
+                text = gameAnswer.getColumn_d().getTextFromPlace(requested_field.getPlace());
+                gameAnswer.getStatus_column_d().setTextOnPlace(requested_field.getPlace(), text);
+                return text;
             default:
                 return "";
         }
     }
-
     @Override
     public Challenge getPlayers(UUID uuid) throws RemoteException{
         return in_game_list.get(uuid).getChallenge();
     }
+
+    @Override
+    public GameStatus getGameStatus(UUID uuid) throws RemoteException {
+        GameAnswer game = in_game_list.get(uuid);
+        GameStatus response = game.getGameStatus();
+        return response;
+    }
+
+
 }

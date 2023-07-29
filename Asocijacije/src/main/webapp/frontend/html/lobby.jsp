@@ -166,7 +166,7 @@
                                         <p>Zika Zikic</p>
                                     </div>
                                     <div class="active-user-info-status">
-                                        <div class="dot in-game"></div>
+                                        <div class="dot in-gameAnswer"></div>
                                         <p>Već u igri</p>
                                     </div>
                                 </div>
