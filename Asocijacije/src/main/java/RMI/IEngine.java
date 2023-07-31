@@ -1,6 +1,7 @@
 package RMI;
 
 import Models.Challenge;
+import Models.ColumnQuest;
 import Models.GameStatus;
 import Models.RequestedField;
 
@@ -13,5 +14,7 @@ public interface IEngine extends Remote {
     String getTextFromPlace(RequestedField requested_field) throws RemoteException;
     Challenge getPlayers(UUID uuid) throws RemoteException;
     GameStatus getGameStatus(UUID uuid) throws RemoteException;
+    ColumnQuest testColumnQuest(ColumnQuest columnQuest) throws RemoteException;
+    GameStatus endTurn(UUID uuid) throws RemoteException;
 
 }

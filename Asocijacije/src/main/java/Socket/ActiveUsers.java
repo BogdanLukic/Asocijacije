@@ -180,6 +180,18 @@ class ActiveUsers {
             e.printStackTrace();
         }
     }
+    public static void sendTurn(ColumnQuest columnQuest, Challenge challenge){
+        SocketIOClient socket_chalanger = getSocketPerUsername(challenge.getChallenger().getUsername());
+        SocketIOClient socket_enemy = getSocketPerUsername(challenge.getEnemy().getUsername());
+
+        try{
+            socket_chalanger.sendEvent("column-quest",objectMapper.writeValueAsString(columnQuest));
+            socket_enemy.sendEvent("column-quest",objectMapper.writeValueAsString(columnQuest));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void sendStatus(GameStatus gameStatus){
 
@@ -189,10 +201,17 @@ class ActiveUsers {
         try{
             socket_chalanger.sendEvent("send-game-status",objectMapper.writeValueAsString(gameStatus));
             socket_enemy.sendEvent("send-game-status",objectMapper.writeValueAsString(gameStatus));
+            if(gameStatus.getOn_turn() == EChallange.challanger)
+            {
+                socket_chalanger.sendEvent("your-turn",gameStatus.getPlay());
+                socket_enemy.sendEvent("not-your-turn",gameStatus.getPlay());
+            }
+            else{
+                socket_enemy.sendEvent("your-turn",gameStatus.getPlay());
+                socket_chalanger.sendEvent("not-your-turn",gameStatus.getPlay());
+            }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        catch (Exception e) {}
     }
 
 }

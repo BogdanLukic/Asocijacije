@@ -84,11 +84,13 @@
     border: none;
 }
 .btn{
-    width: 100%;
+    position: relative;
+    left: 65px;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    gap: 15px;   
 }
 .row-2{
     width: 90%; 
@@ -113,6 +115,45 @@
 
 button{
     cursor: pointer;
+}
+
+.skip{
+    position: relative;
+    right: 0px; 
+    width: 130px !important; 
+    min-width: unset !important; 
+    margin-bottom: 0px !important;
+    pointer-events: auto;
+}
+
+
+/* DISABLED */
+.everything  button,
+.everything input{
+    pointer-events: none !important;
+    /* background-color: rgba(219, 219, 219, 0.8); */
+    opacity: 0.7;
+}
+.disable-inputs input{  /*will be removed when open one button or haven't what play */
+    pointer-events: none !important;
+    /* background-color: rgba(219, 219, 219, 0.8); */
+    opacity: 0.7;
+}
+.disable-button button{
+    pointer-events: none !important;
+    background-color: rgba(219, 219, 219, 0.8);
+    /* opacity: 0.8; */
+}
+
+.disable-skip button{
+    pointer-events: none !important;
+    /* background-color: rgba(219, 219, 219, 0.8); */
+    opacity: 0.7;
+}
+
+.no-disable-skip button{
+    background-color: var(--light-blue) !important;
+    pointer-events: auto !important;
 }
 
 /* effects */  
@@ -148,7 +189,8 @@ button{
 .flip-horizontal-bottom {
 	-webkit-animation: flip-horizontal-bottom 0.4s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
     animation: flip-horizontal-bottom 0.4s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
-    background-color: var(--button-yellow);
+    background-color: var(--button-yellow) !important;
+    cursor: auto;
 }
 @-webkit-keyframes flip-horizontal-bottom {
     0% {
@@ -170,3 +212,78 @@ button{
               transform: rotateX(-360deg);
     }
   }
+  /* ============================ */
+  .challanger-win{
+    background-color: var(--border-color-red) !important;
+    color: white;
+    pointer-events: none;
+  }
+  .enemy-win{
+    background-color: var(--border-color-blue) !important;
+    color: white;
+    pointer-events: none;
+}
+
+
+/* SHAKE */
+.shake-horizontal {
+	-webkit-animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+	        animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}
+ @-webkit-keyframes shake-horizontal {
+    0%,
+    100% {
+      -webkit-transform: translateX(0);
+              transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70% {
+      -webkit-transform: translateX(-10px);
+              transform: translateX(-10px);
+    }
+    20%,
+    40%,
+    60% {
+      -webkit-transform: translateX(10px);
+              transform: translateX(10px);
+    }
+    80% {
+      -webkit-transform: translateX(8px);
+              transform: translateX(8px);
+    }
+    90% {
+      -webkit-transform: translateX(-8px);
+              transform: translateX(-8px);
+    }
+  }
+  @keyframes shake-horizontal {
+    0%,
+    100% {
+      -webkit-transform: translateX(0);
+              transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70% {
+      -webkit-transform: translateX(-10px);
+              transform: translateX(-10px);
+    }
+    20%,
+    40%,
+    60% {
+      -webkit-transform: translateX(10px);
+              transform: translateX(10px);
+    }
+    80% {
+      -webkit-transform: translateX(8px);
+              transform: translateX(8px);
+    }
+    90% {
+      -webkit-transform: translateX(-8px);
+              transform: translateX(-8px);
+    }
+  }
+  

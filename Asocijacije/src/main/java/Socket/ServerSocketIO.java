@@ -86,6 +86,7 @@ class ServerSocketIO {
         challengeResponse();
         forwardPlayer();
         forwardLabel();
+        play();
     }
     ObjectMapper objectMapper = new ObjectMapper();
     private void register(){
@@ -185,7 +186,6 @@ class ServerSocketIO {
             }
         });
     }
-
     private void forwardLabel(){
         server.addEventListener("get-label", String.class, new DataListener<String>() {
             @Override
@@ -194,6 +194,33 @@ class ServerSocketIO {
                 requestedField.setText(engine.getTextFromPlace(requestedField));
                 Challenge challenge = engine.getPlayers(requestedField.getUuid());
                 ActiveUsers.sendTurn(requestedField,challenge);
+            }
+        });
+    }
+    private void play(){
+        server.addEventListener("column-quest", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                ColumnQuest columnQuest = objectMapper.readValue(s,ColumnQuest.class);
+                columnQuest = engine.testColumnQuest(columnQuest);
+                if(!columnQuest.isResponse()) {
+                    Challenge challenge = engine.getPlayers(columnQuest.getUuid_of_game());
+                    ActiveUsers.sendTurn(columnQuest,challenge);
+                    GameStatus gameStatus = engine.endTurn(columnQuest.getUuid_of_game());
+                    ActiveUsers.sendStatus(gameStatus);
+                }
+                else {
+                    GameStatus gameStatus = engine.getGameStatus(columnQuest.getUuid_of_game());
+                    ActiveUsers.sendStatus(gameStatus);
+                }
+            }
+        });
+        server.addEventListener("end-turn", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                Challenge uuid_for_game = objectMapper.readValue(s,Challenge.class);
+                GameStatus gameStatus = engine.endTurn(uuid_for_game.getUuid());
+                ActiveUsers.sendStatus(gameStatus);
             }
         });
     }

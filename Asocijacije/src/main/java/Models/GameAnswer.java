@@ -77,6 +77,7 @@ public class GameAnswer extends GameStatus implements Serializable {
 
         gameStatus.setStatus_konacno_resenje(this.getStatus_konacno_resenje());
         gameStatus.setOn_turn(this.getOn_turn());
+        gameStatus.setPlay(this.getPlay());
 
         return gameStatus;
     }

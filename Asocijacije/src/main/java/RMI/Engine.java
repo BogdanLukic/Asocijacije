@@ -30,6 +30,7 @@ public class Engine extends UnicastRemoteObject implements IEngine{
 
         GameAnswer gameAnswer = new GameAnswer();
         gameAnswer.setOn_turn(EChallange.challanger);
+        gameAnswer.setPlay(EChallange.open);
         gameAnswer.setChallenge(challenge);
         gameAnswer.setAsocijacija(asocijacije);
         gameAnswer.setColumn_a(databaseAsocijacije.getKolonaA(asocijacije));
@@ -45,6 +46,7 @@ public class Engine extends UnicastRemoteObject implements IEngine{
     @Override
     public String getTextFromPlace(RequestedField requested_field) throws RemoteException{
         GameAnswer gameAnswer = in_game_list.get(requested_field.getUuid());
+        gameAnswer.setPlay(EChallange.play);
         String text;
         switch (requested_field.getColumn()){
             case "a":
@@ -79,5 +81,80 @@ public class Engine extends UnicastRemoteObject implements IEngine{
         return response;
     }
 
+    @Override
+    public ColumnQuest testColumnQuest(ColumnQuest columnQuest) throws RemoteException {
+        GameAnswer gameAnswer = in_game_list.get(columnQuest.getUuid_of_game());
+        switch (columnQuest.getColumn()){
+            case "a":
+                if(gameAnswer.getColumn_a().getName().equals(columnQuest.getText()))
+                {
+                    columnQuest.setResponse(true);
+                    EChallange winner = gameAnswer.getOn_turn();
+                    columnQuest.setWinner(winner);
+                    gameAnswer.getStatus_column_a().setName(columnQuest.getText());
+                    gameAnswer.getStatus_column_a().setWinner(winner);
+                    gameAnswer.getColumn_a().setWinner(winner);
+                    gameAnswer.setStatus_column_a(gameAnswer.getColumn_a());
+                }
+                else
+                    columnQuest.setResponse(false);
+                break;
+            case "b":
+                if(gameAnswer.getColumn_b().getName().equals(columnQuest.getText()))
+                {
+                    columnQuest.setResponse(true);
+                    EChallange winner = gameAnswer.getOn_turn();
+                    columnQuest.setWinner(winner);
+                    gameAnswer.getStatus_column_b().setName(columnQuest.getText());
+                    gameAnswer.getStatus_column_b().setWinner(winner);
+                    gameAnswer.getColumn_b().setWinner(winner);
+                    gameAnswer.setStatus_column_b(gameAnswer.getColumn_b());
+                }
+                else
+                    columnQuest.setResponse(false);
+                break;
+            case "c":
+                if(gameAnswer.getColumn_c().getName().equals(columnQuest.getText()))
+                {
+                    columnQuest.setResponse(true);
+                    EChallange winner = gameAnswer.getOn_turn();
+                    columnQuest.setWinner(winner);
+                    gameAnswer.getStatus_column_c().setName(columnQuest.getText());
+                    gameAnswer.getStatus_column_c().setWinner(winner);
+                    gameAnswer.getColumn_c().setWinner(winner);
+                    gameAnswer.setStatus_column_c(gameAnswer.getColumn_c());
+                }
+                else
+                    columnQuest.setResponse(false);
+                break;
+            case "d":
+                if(gameAnswer.getColumn_d().getName().equals(columnQuest.getText()))
+                {
+                    columnQuest.setResponse(true);
+                    EChallange winner = gameAnswer.getOn_turn();
+                    columnQuest.setWinner(winner);
+                    gameAnswer.getStatus_column_d().setName(columnQuest.getText());
+                    gameAnswer.getStatus_column_d().setWinner(winner);
+                    gameAnswer.getColumn_d().setWinner(winner);
+                    gameAnswer.setStatus_column_d(gameAnswer.getColumn_d());
+                }
+                else
+                    columnQuest.setResponse(false);
+                break;
+        }
+        return columnQuest;
+    }
+
+    @Override
+    public GameStatus endTurn(UUID uuid) throws RemoteException{
+        System.out.println("END-TURN");
+        GameAnswer gameAnswer = in_game_list.get(uuid);
+        gameAnswer.setPlay(EChallange.open);
+        if(gameAnswer.getOn_turn() == EChallange.challanger)
+            gameAnswer.setOn_turn(EChallange.enemy);
+        else
+            gameAnswer.setOn_turn(EChallange.challanger);
+        return getGameStatus(uuid);
+    }
 
 }

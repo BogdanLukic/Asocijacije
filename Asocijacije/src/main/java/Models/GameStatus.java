@@ -15,6 +15,7 @@ public class GameStatus implements Serializable {
     private Column_D status_column_d;
     private FinalAnswer status_konacno_resenje;
     private EChallange on_turn;
+    private EChallange play;
 
     public GameStatus() {
         status_column_a = new Column_A();
@@ -94,5 +95,13 @@ public class GameStatus implements Serializable {
 
     public void setStatus_konacno_resenje(FinalAnswer status_konacno_resenje) {
         this.status_konacno_resenje = status_konacno_resenje;
+    }
+
+    public EChallange getPlay() {
+        return play;
+    }
+
+    public void setPlay(EChallange play) {
+        this.play = play;
     }
 }

@@ -6,6 +6,15 @@ function method(button){
         obj.column = column;
         obj.place = place;
         obj.uuid = sessionStorage.getItem('uuid_of_game');
+
+        container = document.querySelector(".party-page");
+        container.classList.remove('disable-inputs');
+        container.classList.add('disable-button');
+
+        disable_skip = document.querySelector("#disable-skip");
+        disable_skip.classList.remove('disable-skip');
+        disable_skip.classList.add('no-disable-skip');
+
         sendTurn(obj);
     }
 }
@@ -18,13 +27,42 @@ function setTextInField(obj){
     place.value = "true";
 }
 
-var settedGameInfo = false; 
+function setDisable(class_for_remove){
+    switch(class_for_remove){
+        case "open":
+            place = document.querySelector(".party-page");
+            place.classList.remove('everything');
+            break;
+        case "play":
+            place = document.querySelector(".party-page");
+            place.classList.remove('everything');
+
+            container = document.querySelector(".party-page");
+            container.classList.remove('disable-inputs');
+            container.classList.add('disable-button');   
+
+            disable_skip = document.querySelector("#disable-skip");
+            disable_skip.classList.remove('disable-skip');
+            disable_skip.classList.add('no-disable-skip');
+            break;
+        case "default":
+            place = document.querySelector(".party-page");
+            place.classList.add('everything');
+
+            container = document.querySelector(".party-page");
+            container.classList.add('disable-inputs');
+            container.classList.remove('disable-button');  
+
+            disable_skip = document.querySelector("#disable-skip");
+            disable_skip.classList.add('disable-skip');
+            disable_skip.classList.remove('no-disable-skip');
+    }
+}
+
 function setGameInfo(obj){  
     party_page = document.querySelector(".party-page");
     party_page.style='display:';
     party_page.classList.add('scale-in-center');
-    console.log(obj);
-    settedGameInfo = true;
     img_challanger = document.querySelector("#img-challanger");
     img_challanger.src = `../images/characters/${obj.challenge.challenger.character_id}.png`;
     img_enemy = document.querySelector("#img-enemy");
@@ -43,6 +81,12 @@ function setGameInfo(obj){
     setFields(obj);
 
 }
+function setInputFields(column,place){
+    if(column.winner == 'challanger')
+        place.classList.add('challanger-win');
+    else if (column.winner == 'enemy')
+        place.classList.add('enemy-win');
+}
 function setFields(obj){
     status_column_a = obj.status_column_a;
     status_column_b = obj.status_column_b;
@@ -55,24 +99,34 @@ function setFields(obj){
         place.innerHTML = status_column_a.one;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_a,place);
     }
     if(status_column_a.two!=null){
         place = document.querySelector("#a2");
         place.innerHTML = status_column_a.two;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_a,place);
     }
     if(status_column_a.three!=null){
         place = document.querySelector("#a3");
         place.innerHTML = status_column_a.three;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_a,place);
     }
     if(status_column_a.four!=null){
         place = document.querySelector("#a4");
         place.innerHTML = status_column_a.four;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_a,place);
+    }
+    if(status_column_a.name!=null){
+        place = document.querySelector("#column-a");
+        place.value = status_column_a.name;
+        place.classList.add('flip-horizontal-bottom');
+        setInputFields(status_column_a,place);
     }
     // B
     if(status_column_b.one!=null){
@@ -80,24 +134,35 @@ function setFields(obj){
         place.innerHTML = status_column_b.one;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_b,place);
     }
     if(status_column_b.two!=null){
         place = document.querySelector("#b2");
         place.innerHTML = status_column_b.two;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_b,place);
     }
     if(status_column_b.three!=null){
         place = document.querySelector("#b3");
         place.innerHTML = status_column_b.three;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_b,place);
     }
     if(status_column_b.four!=null){
         place = document.querySelector("#b4");
         place.innerHTML = status_column_b.four;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_b,place);
+    }
+    if(status_column_b.name!=null){
+        place = document.querySelector("#column-b");
+        place.value = status_column_b.name;
+        place.classList.add('flip-horizontal-bottom');
+        place.disabled = true;
+        setInputFields(status_column_b,place);
     }
     // C
     if(status_column_c.one!=null){
@@ -105,24 +170,35 @@ function setFields(obj){
         place.innerHTML = status_column_c.one;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_c,place);
     }
     if(status_column_c.two!=null){
         place = document.querySelector("#c2");
         place.innerHTML = status_column_c.two;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_c,place);
     }
     if(status_column_c.three!=null){
         place = document.querySelector("#c3");
         place.innerHTML = status_column_c.three;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_c,place);
     }
     if(status_column_c.four!=null){
         place = document.querySelector("#c4");
         place.innerHTML = status_column_c.four;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_c,place);
+    }
+    if(status_column_c.name!=null){
+        place = document.querySelector("#column-c");
+        place.value = status_column_c.name;
+        place.classList.add('flip-horizontal-bottom');
+        place.disabled = true;
+        setInputFields(status_column_c,place);
     }
     // D
     if(status_column_d.one!=null){
@@ -130,24 +206,144 @@ function setFields(obj){
         place.innerHTML = status_column_d.one;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_d,place);
     }
     if(status_column_d.two!=null){
         place = document.querySelector("#d2");
         place.innerHTML = status_column_d.two;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_d,place);
     }
     if(status_column_d.three!=null){
         place = document.querySelector("#d3");
         place.innerHTML = status_column_d.three;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_d,place);
     }
     if(status_column_d.four!=null){
         place = document.querySelector("#d4");
         place.innerHTML = status_column_d.four;
         place.classList.add('flip-horizontal-bottom');
         place.value = "true";
+        setInputFields(status_column_d,place);
     }
+    if(status_column_d.name!=null){
+        place = document.querySelector("#column-d");
+        place.value = status_column_d.name;
+        place.classList.add('flip-horizontal-bottom');
+        place.disabled = true;
+        setInputFields(status_column_d,place);
+    }
+}
 
+input_column_a = document.querySelector("#column-a"); 
+input_column_b = document.querySelector("#column-b");
+input_column_c = document.querySelector("#column-c");
+input_column_d = document.querySelector("#column-d");
+input_column_final = document.querySelector("#column-final");
+
+
+input_column_a.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+      guessColumn(this);
+      event.preventDefault();
+      input_column_a.blur();
+    }
+  });
+  input_column_b.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+      guessColumn(this);
+      event.preventDefault();
+      input_column_b.blur();
+    }
+  });
+  input_column_c.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+      guessColumn(this);
+      event.preventDefault();
+      input_column_c.blur();
+    }
+  });
+  input_column_d.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+        guessColumn(this);
+        event.preventDefault();
+        input_column_d.blur();
+    }
+  });
+  input_column_final.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+        guessColumn(this);
+        event.preventDefault();
+        input_column_final.blur();
+    }
+  });
+
+//   ====================================================================
+input_column_a.addEventListener("input", function () {
+    this.value = this.value.toUpperCase();
+  });
+  input_column_b.addEventListener("input", function () {
+    this.value = this.value.toUpperCase();
+  });
+  input_column_c.addEventListener("input", function () {
+    this.value = this.value.toUpperCase();
+  });
+  input_column_d.addEventListener("input", function () {
+    this.value = this.value.toUpperCase();
+  });
+  input_column_final.addEventListener("input", function () {
+    this.value = this.value.toUpperCase();
+  });
+
+//   ====================================================================
+
+function guessColumn(column){
+    obj = new Object;
+    obj.uuid_of_game = sessionStorage.getItem('uuid_of_game');
+    [q,w] = column.id.split('-');
+    obj.column = w;
+    obj.text = column.value;
+    guessColumnEmit(obj);
+}
+function setGuessTurn(obj){
+    if(obj.response){
+        place1 = document.querySelector(`#${obj.column}1`);
+        place2 = document.querySelector(`#${obj.column}2`);
+        place3 = document.querySelector(`#${obj.column}3`);
+        place4 = document.querySelector(`#${obj.column}4`);
+        input_place = document.querySelector(`#column-${obj.column}`);
+        if(obj.winner == 'challanger'){
+            place1.classList.add('challanger-win');
+            place2.classList.add('challanger-win');
+            place3.classList.add('challanger-win');
+            place4.classList.add('challanger-win');
+            input_place.classList.add('challanger-win');
+        }
+        else{
+            place1.classList.add('enemy-win');
+            place2.classList.add('enemy-win');
+            place3.classList.add('enemy-win');
+            place4.classList.add('enemy-win');
+            input_place.classList.add('enemy-win'); 
+        }
+    }
+    else{
+        input_place = document.querySelector(`#column-${obj.column}`);
+        input_place.classList.add('shake-horizontal');
+        input_place.value = obj.text;
+        setTimeout(()=>{
+            input_place.classList.remove('shake-horizontal');
+            input_place.value='';
+        },1200);
+    }
+}
+
+function endTurnMethod(){
+    obj = new Object();
+    obj.uuid = sessionStorage.getItem('uuid_of_game');
+    endTurn(obj);
+    setDisable("default");
 }
