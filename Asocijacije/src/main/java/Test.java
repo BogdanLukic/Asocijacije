@@ -6,13 +6,15 @@ import Models.GameAnswer;
 import RMI.IEngine;
 
 import java.rmi.Naming;
+import java.util.List;
 
 public class Test {
 
     public static void main(String[] args) {
 
 //        IDatabase db = Database.getConnection();
-//        db.TestScore();
+//        List<Score> list_score =  db.getTopThree();
+//        list_score.get(0).getAccount().getUsername();
 //
 //        Accounts accounts = new Accounts();
 //        accounts.setEmail("bogdanlukic20@gmail.com");

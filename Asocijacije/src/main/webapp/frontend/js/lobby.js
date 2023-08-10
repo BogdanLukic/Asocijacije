@@ -510,3 +510,9 @@ function responseChallenge(obj){
         },2500);
     }
 }
+
+// logout - request
+function logout(){
+    document.getElementById("logout-form").submit();
+    sessionStorage.clear();
+}

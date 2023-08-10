@@ -102,20 +102,34 @@ public class Database implements IDatabase{
             Role role = em.find(Role.class,2);
             account.setRole(role);
 
-            Score score = new Score();
-            score.setScore(0);
-            score.setAccount(account.getId());
+
 
             EntityManagerFactory emf_temp = Persistence.createEntityManagerFactory("asocijacije");
             EntityManager em_temp = emf_temp.createEntityManager();
 
             em_temp.getTransaction().begin();
             em_temp.merge(account);
+            em_temp.getTransaction().commit();
+
+            String jpql = "SELECT a FROM Accounts a where a.username = :username ";
+            TypedQuery<Accounts> query = em_temp.createQuery(jpql,Accounts.class);
+            query.setParameter("username", account.getUsername());
+            List<Accounts> response = query.getResultList();
+            if(!response.isEmpty()){
+                account.setId(response.get(0).getId());
+            }
+
+            Score score = new Score();
+            score.setScore(0);
+            score.setAccount_id(account.getId());
+
+            em_temp.getTransaction().begin();
             em_temp.merge(score);
             em_temp.getTransaction().commit();
 
             em_temp.close();
             emf_temp.close();
+
             return ERegistrationStatus.Success_registration;
         }
     }
@@ -130,7 +144,6 @@ public class Database implements IDatabase{
         List<Score> response = query.getResultList();
         if(!response.isEmpty()){
             Score s = response.get(0);
-            System.out.println("Trenutni skor:" + s.getScore());
             em.refresh(s);
             return s;
         }
@@ -171,5 +184,26 @@ public class Database implements IDatabase{
         if(score_enemy!=null)
             em.merge(score_enemy);
         em.getTransaction().commit();
+    }
+
+    @Override
+    public List<Score> getTopThree() {
+        String jpql = "SELECT s FROM Score s ORDER BY s.score DESC";
+        TypedQuery<Score> query = em.createQuery(jpql, Score.class);
+        query.setMaxResults(3);
+
+        List<Score> response = query.getResultList();
+
+        String jpql1 = "SELECT a FROM Accounts a WHERE a.id = :account_id";
+        TypedQuery<Accounts> query1 = em.createQuery(jpql1, Accounts.class);
+        for (Score entity : response) {
+            query1.setParameter("account_id",entity.getAccount_id());
+            em.refresh(entity);
+            List<Accounts> response1 = query1.getResultList();
+            if(!response1.isEmpty()){
+                entity.setAccount(response1.get(0));
+            }
+        }
+        return response;
     }
 }

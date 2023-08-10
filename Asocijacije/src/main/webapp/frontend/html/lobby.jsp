@@ -2,6 +2,7 @@
 <%@ page import="Database.IDatabase" %>
 <%@ page import="Database.Database" %>
 <%@ page import="Entities.Score" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
@@ -12,6 +13,13 @@
     Accounts account = (Accounts) session.getAttribute("token");
     IDatabase database = Database.getConnection();
     Score score = database.getScore(account);
+    List<Score> list_score = database.getTopThree();
+
+    if(request.getParameter("logout") != null){
+        session.removeAttribute("token");
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 
 <!DOCTYPE html>
@@ -70,6 +78,12 @@
                        <p>Korisničko ime: <span><%=account.getUsername()%></span></p>
                        <p>Email: <span><%=account.getEmail()%></span></p>
                        <p>Trenutni rezultat: <span><%=score.getScore()%></span></p>
+                    </div>
+                    <div class="logout">
+                        <form action="lobby.jsp" method="post" id="logout-form">
+                            <input type="hidden" name="logout" value="1">
+                            <p onclick="logout()">Izloguj se</p>
+                        </form>
                     </div>
                 </div>
 
@@ -196,14 +210,14 @@
                         <div class="active-users-field">
                             <div class="active-user">
                                 <div>
-                                    <img class="active-user-character" src="../images/characters/4.png">
+                                    <img class="active-user-character" src="../images/characters/<%=list_score.get(0).getAccount().getCharacter()%>.png">
                                 </div>
                                 <div class="active-user-info">
                                     <div>
-                                        <p>Pera Peric</p>
+                                        <p><%=list_score.get(0).getAccount().getUsername()%></p>
                                     </div>
                                     <div class="active-user-info-status">
-                                        <p>Trenutno najbolji rezultat: <span>430</span></p>
+                                        <p>Trenutno najbolji rezultat: <span><%=list_score.get(0).getScore()%></span></p>
                                     </div>
                                 </div>
                                 <div class="active-user-options">
@@ -214,14 +228,14 @@
                             </div>
                             <div class="active-user">
                                 <div>
-                                    <img class="active-user-character" src="../images/characters/2.png">
+                                    <img class="active-user-character" src="../images/characters/<%=list_score.get(1).getAccount().getCharacter()%>.png">
                                 </div>
                                 <div class="active-user-info">
                                     <div>
-                                        <p>Uka Ukic </p>
+                                        <p><%=list_score.get(1).getAccount().getUsername()%></p>
                                     </div>
                                     <div class="active-user-info-status">
-                                        <p>Trenutno najbolji rezultat: <span>430</span></p>
+                                        <p>Trenutno najbolji rezultat: <span><%=list_score.get(1).getScore()%></span></p>
                                     </div>
                                 </div>
                                 <div class="active-user-options">
@@ -232,14 +246,14 @@
                             </div>
                             <div class="active-user">
                                 <div>
-                                    <img class="active-user-character" src="../images/characters/6.png">
+                                    <img class="active-user-character" src="../images/characters/<%=list_score.get(2).getAccount().getCharacter()%>.png">
                                 </div>
                                 <div class="active-user-info">
                                     <div>
-                                        <p>Bogdan Lukic</p>
+                                        <p><%=list_score.get(2).getAccount().getUsername()%></p>
                                     </div>
                                     <div class="active-user-info-status">
-                                        <p>Trenutno najbolji rezultat: <span>430</span></p>
+                                        <p>Trenutno najbolji rezultat: <span><%=list_score.get(2).getScore()%></span></p>
                                     </div>
                                 </div>
                                 <div class="active-user-options">

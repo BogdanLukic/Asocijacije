@@ -466,6 +466,6 @@ function displayEndGame(obj){
             </div>
         </div>`;
         }
-    },1000)
+    },750)
     
 }

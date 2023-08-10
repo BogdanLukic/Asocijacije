@@ -10,15 +10,14 @@ public class Score implements Serializable {
     @Id
     private int account_id;
     private int score;
+    transient
+    @OneToOne
+    private Accounts account;
 
     public Score() {
     }
 
-    public int getAccount() {
-        return account_id;
-    }
-
-    public void setAccount(int account) {
+    public void setAccount_id(int account) {
         this.account_id = account;
     }
 
@@ -30,5 +29,17 @@ public class Score implements Serializable {
         this.score += score;
         if(this.score < 0)
             this.score = 0;
+    }
+
+    public int getAccount_id() {
+        return account_id;
+    }
+
+    public void setAccount(Accounts account) {
+        this.account = account;
+    }
+
+    public Accounts getAccount() {
+        return account;
     }
 }
