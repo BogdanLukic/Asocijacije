@@ -1,4 +1,7 @@
 <%@ page import="Entities.Accounts" %>
+<%@ page import="Database.IDatabase" %>
+<%@ page import="Database.Database" %>
+<%@ page import="Entities.Score" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
@@ -7,6 +10,8 @@
         return;
     }
     Accounts account = (Accounts) session.getAttribute("token");
+    IDatabase database = Database.getConnection();
+    Score score = database.getScore(account);
 %>
 
 <!DOCTYPE html>
@@ -64,7 +69,7 @@
                         <p>Trenutni rezultat: <span>140</span></p> -->
                        <p>Korisničko ime: <span><%=account.getUsername()%></span></p>
                        <p>Email: <span><%=account.getEmail()%></span></p>
-                       <p>Trenutni rezultat: <span></span></p>
+                       <p>Trenutni rezultat: <span><%=score.getScore()%></span></p>
                     </div>
                 </div>
 

@@ -1,18 +1,32 @@
 package Socket;
 
+import Database.Database;
+import Database.IDatabase;
 import Entities.Accounts;
 import Models.*;
+import RMI.Engine;
 import RMI.IEngine;
 import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIOServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.rmi.RemoteException;
 import java.util.*;
 
 class ActiveUsers {
     private static HashMap<UUID, UserSessionData> list_of_active_users = new HashMap<UUID,UserSessionData>();
     private static HashMap<String, Inbox> private_message_list = new HashMap<>();
+
+    private static IDatabase database;
+    private static Object lock = new Object();
+    private static IDatabase getDatabase(){
+        if(database == null){
+            synchronized (lock){
+                if(database == null){
+                    database = Database.getConnection();
+                }
+            }
+        }
+        return database;
+    }
 
     public static void addUser(UUID uuid, UserSessionData usd, SocketIOClient socket){
         if(!list_of_active_users.containsKey(uuid)) {
@@ -195,6 +209,10 @@ class ActiveUsers {
 
     public static void sendStatus(GameStatus gameStatus){
 
+        if(gameStatus == null){
+
+        }
+
         SocketIOClient socket_chalanger = getSocketPerUsername(gameStatus.getChallenge().getChallenger().getUsername());
         SocketIOClient socket_enemy = getSocketPerUsername(gameStatus.getChallenge().getEnemy().getUsername());
 
@@ -212,6 +230,47 @@ class ActiveUsers {
             }
         }
         catch (Exception e) {}
+    }
+    public static void sendEngGame(GameStatus gameStatus){
+        SocketIOClient socket_chalanger = getSocketPerUsername(gameStatus.getChallenge().getChallenger().getUsername());
+        SocketIOClient socket_enemy = getSocketPerUsername(gameStatus.getChallenge().getEnemy().getUsername());
+        try{
+
+            int points_of_challanger = gameStatus.getPoints_of_challanger();
+            int points_of_enemy = gameStatus.getPoints_of_enemy();
+
+            EndGame challanger = new EndGame();
+            EndGame enemy = new EndGame();
+
+            if(points_of_challanger > points_of_enemy){
+                challanger.setWin(true);
+                challanger.setPoints(points_of_challanger - points_of_enemy);
+                enemy.setWin(false);
+                enemy.setPoints(points_of_enemy - points_of_challanger);
+            }
+            else if (points_of_challanger < points_of_enemy){
+                challanger.setWin(false);
+                challanger.setPoints(points_of_challanger - points_of_enemy);
+                enemy.setWin(true);
+                enemy.setPoints(points_of_enemy - points_of_challanger);
+            }
+            else {
+                challanger.setWin(false);
+                challanger.setPoints(0);
+                enemy.setWin(false);
+                enemy.setPoints(0);
+            }
+
+            if(database == null)
+                database = getDatabase();
+
+            database.setPoints(gameStatus, challanger, enemy);
+
+            socket_chalanger.sendEvent("end-game",objectMapper.writeValueAsString(challanger));
+            socket_enemy.sendEvent("end-game",objectMapper.writeValueAsString(enemy));
+        }
+        catch (Exception e){}
+
     }
 
 }

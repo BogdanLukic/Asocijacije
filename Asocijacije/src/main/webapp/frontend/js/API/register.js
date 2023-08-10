@@ -45,7 +45,7 @@ button.addEventListener('click', function() {
 });
 
 function username_test(username){
-    const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$");
+    const regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z]).+$");
     if(regex.test(username)){
         username_error_msg.style.visibility = 'hidden';
         return true;

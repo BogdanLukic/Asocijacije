@@ -27,24 +27,20 @@ function registerGame(){
 // ===========================================================================
 function sendTurn(obj){
     socket.emit("get-label",JSON.stringify(obj));
-    console.log("sendTurn");
 }
 
 function getGameStatus(){
     obj = new Object();
     obj.uuid = sessionStorage.getItem('uuid_of_game');
     socket.emit("get-game-status",JSON.stringify(obj));
-    console.log("getGameStatus");
 }
 
 function guessColumnEmit(obj){
     socket.emit("column-quest",JSON.stringify(obj));
-    console.log("guessColumnEmit");
 }
 
 function endTurn(obj){
     socket.emit("end-turn",JSON.stringify(obj));
-    console.log("endTurn");
 }
 
 // EVENTS
@@ -54,6 +50,7 @@ function addEventsParty(){
     reciveStatus();
     reciveGuessColumn();
     reciveNotYourTurn();
+    reciveEndGame();
 }
 function reciveTurn(){
     socket.on('send-turn',(data)=>{
@@ -67,14 +64,13 @@ function reciveTurn(){
 function reciveStatus(){
     socket.on('send-game-status',(data)=>{
         obj = JSON.parse(data);
-        console.log(obj);
         setGameInfo(obj);
+        console.log(obj);
     });
 }
 function reciveGuessColumn(){
     socket.on('column-quest',(data)=>{
         obj = JSON.parse(data);
-        console.log(obj);
         setGuessTurn(obj);
     })
 }
@@ -82,4 +78,12 @@ function reciveNotYourTurn(){
     socket.on('not-your-turn',(data)=>{
         setDisable('default');
     }) 
+}
+function reciveEndGame(){
+    socket.on('end-game',(data)=>{
+        data = JSON.parse(data);
+        console.log(data);
+        sessionStorage.removeItem('uuid_of_game');
+        displayEndGame(data);
+    })
 }

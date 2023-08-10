@@ -14,6 +14,11 @@ public class GameAnswer extends GameStatus implements Serializable {
     private FinalAnswer konacno_resenje;
 
     public GameAnswer(){
+        column_a = new Column_A();
+        column_b = new Column_B();
+        column_c = new Column_C();
+        column_d = new Column_D();
+        konacno_resenje = new FinalAnswer();
     }
 
     public int getAsocijacija() {

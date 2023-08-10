@@ -2,14 +2,12 @@ package Database;
 
 import Entities.Accounts;
 import Entities.Role;
+import Entities.Score;
 import Models.ERegistrationStatus;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
-import jdk.jfr.Percentage;
+import Models.EndGame;
+import Models.GameStatus;
+import jakarta.persistence.*;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 public class Database implements IDatabase{
@@ -104,16 +102,74 @@ public class Database implements IDatabase{
             Role role = em.find(Role.class,2);
             account.setRole(role);
 
+            Score score = new Score();
+            score.setScore(0);
+            score.setAccount(account.getId());
+
             EntityManagerFactory emf_temp = Persistence.createEntityManagerFactory("asocijacije");
             EntityManager em_temp = emf_temp.createEntityManager();
 
             em_temp.getTransaction().begin();
             em_temp.merge(account);
+            em_temp.merge(score);
             em_temp.getTransaction().commit();
 
             em_temp.close();
             emf_temp.close();
             return ERegistrationStatus.Success_registration;
         }
+    }
+
+    @Override
+    public Score getScore(Accounts account) {
+        String jpql = "SELECT s FROM Score s where s.account_id = :account_id ";
+        TypedQuery<Score> query = em.createQuery(jpql,Score.class)
+                .setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS)
+                .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        query.setParameter("account_id", account.getId());
+        List<Score> response = query.getResultList();
+        if(!response.isEmpty()){
+            Score s = response.get(0);
+            System.out.println("Trenutni skor:" + s.getScore());
+            em.refresh(s);
+            return s;
+        }
+        return null;
+    }
+
+    @Override
+    public void setPoints(GameStatus gameStatus, EndGame points_challanger, EndGame points_enemy) {
+        String jpql = "SELECT s FROM Score s where s.account_id = :account_id ";
+        TypedQuery<Score> query = em.createQuery(jpql,Score.class)
+                .setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS)
+                .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        query.setParameter("account_id", gameStatus.getChallenge().getChallenger().getId());
+        List<Score> challanger = query.getResultList();
+
+        Score score_challanger = null;
+        Score score_enemy = null;
+
+        if(!challanger.isEmpty()) {
+            score_challanger = challanger.get(0);
+            score_challanger.setScore(points_challanger.getPoints());
+        }
+
+        String jpql_2 = "SELECT s FROM Score s where s.account_id = :account_id ";
+        TypedQuery<Score> query2 = em.createQuery(jpql_2,Score.class)
+                .setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS)
+                .setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        query2.setParameter("account_id", gameStatus.getChallenge().getEnemy().getId());
+        List<Score> enemy = query2.getResultList();
+
+        if(!enemy.isEmpty()){
+            score_enemy = enemy.get(0);
+            score_enemy.setScore(points_enemy.getPoints());
+        }
+        em.getTransaction().begin();
+        if(score_challanger!=null)
+            em.merge(score_challanger);
+        if(score_enemy!=null)
+            em.merge(score_enemy);
+        em.getTransaction().commit();
     }
 }

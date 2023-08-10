@@ -19,6 +19,10 @@ public class Column_C implements Serializable {
     @Transient
     private EChallange winner;
 
+    public Column_C(){
+        winner = null;
+    }
+
     public int getId_konacno_resenje() {
         return id_konacno_resenje;
     }

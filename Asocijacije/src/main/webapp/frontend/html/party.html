@@ -13,6 +13,22 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>  
 </head>
   <body onload="initParty()">
+<!-- <body> -->
+
+    <div id="overlay" style="display: none;">
+        <!-- <div class="overlay-notify">
+            <div>
+                <h2>Nažalost, izgubili ste:</h2>
+            </div>
+            <div>
+                <h3>10 poena</h3>
+            </div>
+            <div class="">
+                <button class="play-button-solo skip">Početna</button>
+            </div>
+        </div> -->
+    </div>
+
     <div id="bodyContainer">
         <div class="party-page everything disable-inputs" style="display: none;">
             <div class="match-info">
@@ -83,17 +99,17 @@
                     </div>
                     <div class="row row-5">
                         <div>
-                            <input id="column-a" class="input-classic-game input-classic-bs" placeholder="Kolona A">
+                            <input id="column-a" class="input-classic-game input-classic-bs disable-manual" placeholder="Kolona A" autocomplete="off">
                         </div>
                         <div>
-                            <input id="column-b" class="input-classic-game input-classic-bs" placeholder="Kolona B">
+                            <input id="column-b" class="input-classic-game input-classic-bs disable-manual" placeholder="Kolona B" autocomplete="off">
                         </div>
                     </div>
                 </div>
 
                 <div class="btn">
                     <div>
-                        <input id="column-final" class="input-classic-game input-classic-bs" placeholder="Konacno">
+                        <input id="column-final" class="input-classic-game input-classic-bs disable-manual" placeholder="Konacno" autocomplete="off">
                     </div>
                     <div id="disable-skip" class="disable-skip">
                         <button class="play-button-solo skip" onclick="endTurnMethod()">Preskoči</button>
@@ -103,10 +119,10 @@
                 <div class="bottom">
                     <div class="row row-5">
                         <div>
-                            <input id="column-c" class="input-classic-game input-classic-bs" placeholder="Kolona C">
+                            <input id="column-c" class="input-classic-game input-classic-bs disable-manual" placeholder="Kolona C" autocomplete="off">
                         </div>
                         <div>
-                            <input id="column-d" class="input-classic-game input-classic-bs" placeholder="Kolona D">
+                            <input id="column-d" class="input-classic-game input-classic-bs disable-manual" placeholder="Kolona D" autocomplete="off">
                         </div>
                     </div>
                     <div class="row row-4">

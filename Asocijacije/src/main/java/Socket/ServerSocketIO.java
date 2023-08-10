@@ -36,6 +36,7 @@ class ServerSocketIO {
         }
         catch (Exception e){
             System.out.println("RMI nije pokrenut, pokrenuti StartRMI");
+            System.exit(1);
         }
 
     }
@@ -182,7 +183,11 @@ class ServerSocketIO {
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
                 Challenge challenge = objectMapper.readValue(s,Challenge.class);
                 GameStatus gameStatus = engine.getGameStatus(challenge.getUuid());
-                ActiveUsers.sendStatus(gameStatus);
+                if(gameStatus != null)
+                    ActiveUsers.sendStatus(gameStatus);
+                else{
+                    socketIOClient.sendEvent("send-game-status",objectMapper.writeValueAsString(null));
+                }
             }
         });
     }
@@ -212,6 +217,10 @@ class ServerSocketIO {
                 else {
                     GameStatus gameStatus = engine.getGameStatus(columnQuest.getUuid_of_game());
                     ActiveUsers.sendStatus(gameStatus);
+                    if(gameStatus.getStatus_konacno_resenje().getWinner() != null){
+                        ActiveUsers.sendEngGame(gameStatus);
+                        engine.removeGame(gameStatus.getChallenge().getUuid());
+                    }
                 }
             }
         });

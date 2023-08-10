@@ -38,7 +38,7 @@ public class GameStatus implements Serializable {
     }
 
     public void setPoints_of_challanger(int points_of_challanger) {
-        this.points_of_challanger = points_of_challanger;
+        this.points_of_challanger += points_of_challanger;
     }
 
     public int getPoints_of_enemy() {
@@ -46,7 +46,7 @@ public class GameStatus implements Serializable {
     }
 
     public void setPoints_of_enemy(int points_of_enemy) {
-        this.points_of_enemy = points_of_enemy;
+        this.points_of_enemy += points_of_enemy;
     }
 
     public Column_A getStatus_column_a() {
@@ -103,5 +103,51 @@ public class GameStatus implements Serializable {
 
     public void setPlay(EChallange play) {
         this.play = play;
+    }
+    public int calculatePoints(String column){
+        int points = 1;
+        switch (column){
+            case "a":
+                if(status_column_a.getOne() == null)
+                    points++;
+                if(status_column_a.getTwo() == null)
+                    points++;
+                if(status_column_a.getThree() == null)
+                    points++;
+                if(status_column_a.getFour() == null)
+                    points++;
+                return points;
+            case "b":
+                if(status_column_b.getOne() == null)
+                    points++;
+                if(status_column_b.getTwo() == null)
+                    points++;
+                if(status_column_b.getThree() == null)
+                    points++;
+                if(status_column_b.getFour() == null)
+                    points++;
+                return points;
+            case "c":
+                if(status_column_c.getOne() == null)
+                    points++;
+                if(status_column_c.getTwo() == null)
+                    points++;
+                if(status_column_c.getThree() == null)
+                    points++;
+                if(status_column_c.getFour() == null)
+                    points++;
+                return points;
+            case "d":
+                if(status_column_d.getOne() == null)
+                    points++;
+                if(status_column_d.getTwo() == null)
+                    points++;
+                if(status_column_d.getThree() == null)
+                    points++;
+                if(status_column_d.getFour() == null)
+                    points++;
+                return points;
+        }
+        return 0;
     }
 }

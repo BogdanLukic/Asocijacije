@@ -15,6 +15,10 @@ public class FinalAnswer implements Serializable {
     @Transient
     private EChallange winner;
 
+    public FinalAnswer(){
+        winner = null;
+    }
+
     public int getId() {
         return id;
     }

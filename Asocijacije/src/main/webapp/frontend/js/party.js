@@ -15,6 +15,9 @@ function method(button){
         disable_skip.classList.remove('disable-skip');
         disable_skip.classList.add('no-disable-skip');
 
+        place = document.querySelector(`#column-${obj.column}`);
+        place.classList.remove('disable-manual');
+
         sendTurn(obj);
     }
 }
@@ -60,26 +63,36 @@ function setDisable(class_for_remove){
 }
 
 function setGameInfo(obj){  
-    party_page = document.querySelector(".party-page");
-    party_page.style='display:';
-    party_page.classList.add('scale-in-center');
-    img_challanger = document.querySelector("#img-challanger");
-    img_challanger.src = `../images/characters/${obj.challenge.challenger.character_id}.png`;
-    img_enemy = document.querySelector("#img-enemy");
-    img_enemy.src = `../images/characters/${obj.challenge.enemy.character_id}.png`;
+    if(obj!=null)
+    {
+        party_page = document.querySelector(".party-page");
+        party_page.style='display:';
+        party_page.classList.add('scale-in-center');
+        img_challanger = document.querySelector("#img-challanger");
+        img_challanger.src = `../images/characters/${obj.challenge.challenger.character_id}.png`;
+        img_enemy = document.querySelector("#img-enemy");
+        img_enemy.src = `../images/characters/${obj.challenge.enemy.character_id}.png`;
 
-    name_challanger = document.querySelector("#name-challanger");
-    name_challanger.innerHTML = `${obj.challenge.challenger.username}`;
-    name_enemy = document.querySelector("#name-enemy");
-    name_enemy.innerHTML = `${obj.challenge.enemy.username}`;
+        name_challanger = document.querySelector("#name-challanger");
+        name_challanger.innerHTML = `${obj.challenge.challenger.username}`;
+        name_enemy = document.querySelector("#name-enemy");
+        name_enemy.innerHTML = `${obj.challenge.enemy.username}`;
 
-    points_challanger = document.querySelector("#points-challanger");
-    points_enemy = document.querySelector("#points-enemy");
-    points_challanger.innerHTML = obj.points_of_challanger;
-    points_enemy.innerHTML = obj.points_of_enemy;
+        points_challanger = document.querySelector("#points-challanger");
+        points_enemy = document.querySelector("#points-enemy");
+        points_challanger.innerHTML = obj.points_of_challanger;
+        points_enemy.innerHTML = obj.points_of_enemy;
 
-    setFields(obj);
-
+        setFields(obj);
+        setInputEnalbe(obj);
+    }
+    else{
+        endGame();
+    }
+}
+function endGame(){
+    sessionStorage.removeItem('uuid_of_game');
+    window.open("lobby.jsp","_self");
 }
 function setInputFields(column,place){
     if(column.winner == 'challanger')
@@ -92,6 +105,7 @@ function setFields(obj){
     status_column_b = obj.status_column_b;
     status_column_c = obj.status_column_c;
     status_column_d = obj.status_column_d;
+    status_column_final = obj.status_konacno_resenje;
 
     // A
     if(status_column_a.one!=null){
@@ -233,8 +247,16 @@ function setFields(obj){
         place = document.querySelector("#column-d");
         place.value = status_column_d.name;
         place.classList.add('flip-horizontal-bottom');
-        place.disabled = true;
+        place.disabled = "true";
         setInputFields(status_column_d,place);
+    }
+    // final
+    if(status_column_final.name != null){
+        place = document.querySelector("#column-final");
+        place.value = status_column_final.name;
+        place.classList.add('flip-horizontal-bottom');
+        place.disabled = "true";
+        setInputFields(status_column_final,place);
     }
 }
 
@@ -300,12 +322,73 @@ input_column_a.addEventListener("input", function () {
 
 //   ====================================================================
 
+function setInputEnalbe(obj){
+    if(obj.status_column_a.one != null || 
+        obj.status_column_a.two != null || 
+        obj.status_column_a.three != null || 
+        obj.status_column_a.four != null ){
+            input_column_a.classList.remove('disable-manual');
+            input_column_a.classList.add('enable-manual');
+        }
+    if(obj.status_column_b.one != null || 
+        obj.status_column_b.two != null || 
+        obj.status_column_b.three != null || 
+        obj.status_column_b.four != null ){
+            input_column_b.classList.remove('disable-manual');
+            input_column_b.classList.add('enable-manual');
+    }
+    if(obj.status_column_c.one != null || 
+        obj.status_column_c.two != null || 
+        obj.status_column_c.three != null || 
+        obj.status_column_c.four != null ){
+            input_column_c.classList.remove('disable-manual');
+            input_column_c.classList.add('enable-manual');
+    }
+    if(obj.status_column_d.one != null || 
+        obj.status_column_d.two != null || 
+        obj.status_column_d.three != null || 
+        obj.status_column_d.four != null ){
+            input_column_d.classList.remove('disable-manual');
+            input_column_d.classList.add('enable-manual');
+    }
+
+    if(obj.status_column_a.name != null || 
+        obj.status_column_b.name != null ||
+        obj.status_column_c.name != null ||
+        obj.status_column_d.name != null){
+            input_column_final.classList.remove('disable-manual');
+    }
+    canPlay(obj);
+}
+
+function canPlay(obj){
+    if(obj.status_column_a.one != null && obj.status_column_a.two !=null && obj.status_column_a.three !=null && obj.status_column_a.four !=null &&
+        obj.status_column_b.one != null && obj.status_column_b.two !=null && obj.status_column_b.three !=null && obj.status_column_b.four !=null &&
+        obj.status_column_c.one != null && obj.status_column_c.two !=null && obj.status_column_c.three !=null && obj.status_column_c.four !=null && 
+        obj.status_column_d.one != null && obj.status_column_d.two !=null && obj.status_column_d.three !=null && obj.status_column_d.four !=null)
+        {
+            // try{
+                place = document.querySelector(".party-page");
+                place.classList.remove('everything'); 
+                place.classList.remove('disable-inputs');
+    
+                disable_skip = document.querySelector("#disable-skip");
+                disable_skip.classList.remove('disable-skip');
+                disable_skip.classList.add('no-disable-skip');
+
+                console.log("USAO");
+            // }
+            // catch(e){}
+        }
+}
+
 function guessColumn(column){
     obj = new Object;
     obj.uuid_of_game = sessionStorage.getItem('uuid_of_game');
     [q,w] = column.id.split('-');
     obj.column = w;
     obj.text = column.value;
+    console.log(obj);
     guessColumnEmit(obj);
 }
 function setGuessTurn(obj){
@@ -346,4 +429,43 @@ function endTurnMethod(){
     obj.uuid = sessionStorage.getItem('uuid_of_game');
     endTurn(obj);
     setDisable("default");
+}
+
+function goToLobby(){
+    window.open("lobby.jsp","_self");
+}
+
+function displayEndGame(obj){
+    div_overlay = document.querySelector("#overlay");
+    setTimeout(()=>{
+        div_overlay.style.display = '';
+        div_overlay.classList.add('scale-in-center');
+        if(obj.win == true){
+            div_overlay.innerHTML+=`<div class="overlay-notify">
+            <div>
+                <h2>Čestitamo, osvojili ste:</h2>
+            </div>
+            <div>
+                <h3>${obj.points} poena</h3>
+            </div>
+            <div class="">
+                <button onclick="goToLobby()" class="play-button-solo skip">Početna</button>
+            </div>
+        </div>`;
+        }
+        else{
+            div_overlay.innerHTML+=`<div class="overlay-notify">
+            <div>
+                <h2>Nažalost, izgubili ste:</h2>
+            </div>
+            <div>
+                <h3>${obj.points} poena</h3>
+            </div>
+            <div class="">
+                <button onclick="goToLobby()" class="play-button-solo skip">Početna</button>
+            </div>
+        </div>`;
+        }
+    },1000)
+    
 }

@@ -3,13 +3,11 @@ package RMI;
 import Database.DatabaseAsocijacije;
 import Database.IDatabaseAsocijacije;
 import Models.*;
+import com.google.protobuf.MapEntry;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class Engine extends UnicastRemoteObject implements IEngine{
 
@@ -38,6 +36,9 @@ public class Engine extends UnicastRemoteObject implements IEngine{
         gameAnswer.setColumn_c(databaseAsocijacije.getKolonaC(asocijacije));
         gameAnswer.setColumn_d(databaseAsocijacije.getKolonaD(asocijacije));
         gameAnswer.setKonacno_resenje(databaseAsocijacije.getKonacnoResenje(asocijacije));
+
+        System.out.println("winner:"+gameAnswer.getKonacno_resenje().getWinner());
+
         synchronized (in_game_list){
             in_game_list.put(uuid, gameAnswer);
         }
@@ -77,8 +78,11 @@ public class Engine extends UnicastRemoteObject implements IEngine{
     @Override
     public GameStatus getGameStatus(UUID uuid) throws RemoteException {
         GameAnswer game = in_game_list.get(uuid);
-        GameStatus response = game.getGameStatus();
-        return response;
+        if(game != null){
+            GameStatus response = game.getGameStatus();
+            return response;
+        }
+        return null;
     }
 
     @Override
@@ -91,6 +95,11 @@ public class Engine extends UnicastRemoteObject implements IEngine{
                     columnQuest.setResponse(true);
                     EChallange winner = gameAnswer.getOn_turn();
                     columnQuest.setWinner(winner);
+                    int points = gameAnswer.calculatePoints("a");
+                    if(winner == EChallange.challanger)
+                        gameAnswer.setPoints_of_challanger(points);
+                    else
+                        gameAnswer.setPoints_of_enemy(points);
                     gameAnswer.getStatus_column_a().setName(columnQuest.getText());
                     gameAnswer.getStatus_column_a().setWinner(winner);
                     gameAnswer.getColumn_a().setWinner(winner);
@@ -105,6 +114,11 @@ public class Engine extends UnicastRemoteObject implements IEngine{
                     columnQuest.setResponse(true);
                     EChallange winner = gameAnswer.getOn_turn();
                     columnQuest.setWinner(winner);
+                    int points = gameAnswer.calculatePoints("b");
+                    if(winner == EChallange.challanger)
+                        gameAnswer.setPoints_of_challanger(points);
+                    else
+                        gameAnswer.setPoints_of_enemy(points);
                     gameAnswer.getStatus_column_b().setName(columnQuest.getText());
                     gameAnswer.getStatus_column_b().setWinner(winner);
                     gameAnswer.getColumn_b().setWinner(winner);
@@ -119,6 +133,11 @@ public class Engine extends UnicastRemoteObject implements IEngine{
                     columnQuest.setResponse(true);
                     EChallange winner = gameAnswer.getOn_turn();
                     columnQuest.setWinner(winner);
+                    int points = gameAnswer.calculatePoints("c");
+                    if(winner == EChallange.challanger)
+                        gameAnswer.setPoints_of_challanger(points);
+                    else
+                        gameAnswer.setPoints_of_enemy(points);
                     gameAnswer.getStatus_column_c().setName(columnQuest.getText());
                     gameAnswer.getStatus_column_c().setWinner(winner);
                     gameAnswer.getColumn_c().setWinner(winner);
@@ -133,6 +152,11 @@ public class Engine extends UnicastRemoteObject implements IEngine{
                     columnQuest.setResponse(true);
                     EChallange winner = gameAnswer.getOn_turn();
                     columnQuest.setWinner(winner);
+                    int points = gameAnswer.calculatePoints("d");
+                    if(winner == EChallange.challanger)
+                        gameAnswer.setPoints_of_challanger(points);
+                    else
+                        gameAnswer.setPoints_of_enemy(points);
                     gameAnswer.getStatus_column_d().setName(columnQuest.getText());
                     gameAnswer.getStatus_column_d().setWinner(winner);
                     gameAnswer.getColumn_d().setWinner(winner);
@@ -141,13 +165,54 @@ public class Engine extends UnicastRemoteObject implements IEngine{
                 else
                     columnQuest.setResponse(false);
                 break;
+            case "final":
+                if(gameAnswer.getKonacno_resenje().getName().equals(columnQuest.getText())){
+                    columnQuest.setResponse(true);
+                    EChallange winner = gameAnswer.getOn_turn();
+                    columnQuest.setWinner(winner);
+                    int points = 5;
+                    if(gameAnswer.getStatus_column_a().getWinner() == null){
+                        gameAnswer.getColumn_a().setWinner(winner);
+                        points += gameAnswer.calculatePoints("a");
+                    }
+                    gameAnswer.setStatus_column_a(gameAnswer.getColumn_a());
+
+                    if(gameAnswer.getStatus_column_b().getWinner() == null){
+                        gameAnswer.getColumn_b().setWinner(winner);
+                        points += gameAnswer.calculatePoints("b");
+                    }
+                    gameAnswer.setStatus_column_b(gameAnswer.getColumn_b());
+
+                    if(gameAnswer.getStatus_column_c().getWinner() == null){
+                        gameAnswer.getColumn_c().setWinner(winner);
+                        points += gameAnswer.calculatePoints("c");
+                    }
+                    gameAnswer.setStatus_column_c(gameAnswer.getColumn_c());
+
+                    if(gameAnswer.getStatus_column_d().getWinner() == null){
+                        gameAnswer.getColumn_d().setWinner(winner);
+                        points += gameAnswer.calculatePoints("d");
+                    }
+                    gameAnswer.setStatus_column_d(gameAnswer.getColumn_d());
+
+                    if(winner == EChallange.challanger){
+                        gameAnswer.setPoints_of_challanger(points);
+                    }
+                    else{
+                        gameAnswer.setPoints_of_enemy(points);
+                    }
+
+                    gameAnswer.getStatus_konacno_resenje().setName(columnQuest.getText());
+                    gameAnswer.setStatus_konacno_resenje(gameAnswer.getKonacno_resenje());
+                    gameAnswer.getStatus_konacno_resenje().setWinner(winner);
+                }
+                break;
         }
         return columnQuest;
     }
 
     @Override
     public GameStatus endTurn(UUID uuid) throws RemoteException{
-        System.out.println("END-TURN");
         GameAnswer gameAnswer = in_game_list.get(uuid);
         gameAnswer.setPlay(EChallange.open);
         if(gameAnswer.getOn_turn() == EChallange.challanger)
@@ -157,4 +222,11 @@ public class Engine extends UnicastRemoteObject implements IEngine{
         return getGameStatus(uuid);
     }
 
+    @Override
+    public void removeGame(UUID uuid) throws RemoteException{
+        try{
+            in_game_list.remove(uuid);
+        }
+        catch (Exception e){}
+    }
 }
