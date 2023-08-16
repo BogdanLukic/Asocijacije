@@ -1,6 +1,7 @@
 package Models;
 
 import Entities.*;
+import Services.Timer;
 
 import java.io.Serializable;
 
@@ -12,6 +13,8 @@ public class GameAnswer extends GameStatus implements Serializable {
     private Column_C column_c;
     private Column_D column_d;
     private FinalAnswer konacno_resenje;
+    private int counter;
+    private Timer timer;
 
     public GameAnswer(){
         column_a = new Column_A();
@@ -19,6 +22,11 @@ public class GameAnswer extends GameStatus implements Serializable {
         column_c = new Column_C();
         column_d = new Column_D();
         konacno_resenje = new FinalAnswer();
+        timer = new Timer();
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     public int getAsocijacija() {
@@ -84,6 +92,16 @@ public class GameAnswer extends GameStatus implements Serializable {
         gameStatus.setOn_turn(this.getOn_turn());
         gameStatus.setPlay(this.getPlay());
 
+        gameStatus.setSecond(this.timer.getSecond());
+
         return gameStatus;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void counting() {
+        this.counter += 1;
     }
 }

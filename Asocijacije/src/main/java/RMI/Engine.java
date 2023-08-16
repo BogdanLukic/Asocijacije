@@ -2,6 +2,7 @@ package RMI;
 
 import Database.DatabaseAsocijacije;
 import Database.IDatabaseAsocijacije;
+import Entities.Accounts;
 import Models.*;
 import com.google.protobuf.MapEntry;
 
@@ -37,7 +38,7 @@ public class Engine extends UnicastRemoteObject implements IEngine{
         gameAnswer.setColumn_d(databaseAsocijacije.getKolonaD(asocijacije));
         gameAnswer.setKonacno_resenje(databaseAsocijacije.getKonacnoResenje(asocijacije));
 
-        System.out.println("winner:"+gameAnswer.getKonacno_resenje().getWinner());
+        gameAnswer.getTimer().startTimer();
 
         synchronized (in_game_list){
             in_game_list.put(uuid, gameAnswer);
@@ -215,10 +216,17 @@ public class Engine extends UnicastRemoteObject implements IEngine{
     public GameStatus endTurn(UUID uuid) throws RemoteException{
         GameAnswer gameAnswer = in_game_list.get(uuid);
         gameAnswer.setPlay(EChallange.open);
-        if(gameAnswer.getOn_turn() == EChallange.challanger)
+        if(gameAnswer.getOn_turn() == EChallange.challanger){
             gameAnswer.setOn_turn(EChallange.enemy);
+            gameAnswer.getTimer().stopTimer();
+            gameAnswer.getTimer().startTimer();
+        }
         else
+        {
             gameAnswer.setOn_turn(EChallange.challanger);
+            gameAnswer.getTimer().stopTimer();
+            gameAnswer.getTimer().startTimer();
+        }
         return getGameStatus(uuid);
     }
 
@@ -228,5 +236,24 @@ public class Engine extends UnicastRemoteObject implements IEngine{
             in_game_list.remove(uuid);
         }
         catch (Exception e){}
+    }
+
+    @Override
+    public boolean countNotPlayable(UUID uuid) throws RemoteException {
+        in_game_list.get(uuid).counting();
+        if(in_game_list.get(uuid).getCounter() == 6)
+            return true;
+        return false;
+    }
+
+    @Override
+    public GameStatus surrender(Accounts surr) throws RemoteException {
+        for (Map.Entry<UUID, GameAnswer> entry : in_game_list.entrySet()) {
+            if(entry.getValue().getChallenge().getChallenger().getUsername().equals(surr.getUsername()) ||
+            entry.getValue().getChallenge().getEnemy().getUsername().equals(surr.getUsername())){
+                return entry.getValue().getGameStatus();
+            }
+        }
+        return null;
     }
 }

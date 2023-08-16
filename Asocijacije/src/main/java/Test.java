@@ -4,6 +4,7 @@ import Entities.*;
 import Models.Challenge;
 import Models.GameAnswer;
 import RMI.IEngine;
+import Services.Timer;
 
 import java.rmi.Naming;
 import java.util.List;
@@ -11,7 +12,13 @@ import java.util.List;
 public class Test {
 
     public static void main(String[] args) {
-
+        Timer timer = new Timer();
+        timer.startTimer();
+        try{
+            Thread.sleep(3000);
+        }
+        catch (Exception e) {}
+        System.out.println(timer.getSecond());
 //        IDatabase db = Database.getConnection();
 //        List<Score> list_score =  db.getTopThree();
 //        list_score.get(0).getAccount().getUsername();

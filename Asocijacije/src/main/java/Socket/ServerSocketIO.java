@@ -67,6 +67,10 @@ class ServerSocketIO {
         System.out.println("Server je pokrenut na http://localhost:2020");
     }
 
+    static IEngine getEngine(){
+        return engine;
+    }
+
     private static Object lock = new Object();
     public static void startServer(){
         if(server == null) {
@@ -230,6 +234,18 @@ class ServerSocketIO {
                 Challenge uuid_for_game = objectMapper.readValue(s,Challenge.class);
                 GameStatus gameStatus = engine.endTurn(uuid_for_game.getUuid());
                 ActiveUsers.sendStatus(gameStatus);
+            }
+        });
+        server.addEventListener("not-playable", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                UUID uuid_for_game = UUID.fromString(s);
+                boolean end = engine.countNotPlayable(uuid_for_game);
+                if(end){
+                    GameStatus gameStatus = engine.getGameStatus(uuid_for_game);
+                    ActiveUsers.sendEngGame(gameStatus);
+                    engine.removeGame(gameStatus.getChallenge().getUuid());
+                }
             }
         });
     }

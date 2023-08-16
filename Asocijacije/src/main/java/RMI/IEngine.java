@@ -1,5 +1,6 @@
 package RMI;
 
+import Entities.Accounts;
 import Models.Challenge;
 import Models.ColumnQuest;
 import Models.GameStatus;
@@ -18,4 +19,6 @@ public interface IEngine extends Remote {
     ColumnQuest testColumnQuest(ColumnQuest columnQuest) throws RemoteException;
     GameStatus endTurn(UUID uuid) throws RemoteException;
     void removeGame(UUID uuid) throws RemoteException;
+    boolean countNotPlayable(UUID uuid) throws RemoteException;
+    GameStatus surrender(Accounts surr) throws RemoteException;
 }

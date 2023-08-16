@@ -57,6 +57,7 @@ class ActiveUsers {
         for (Map.Entry<UUID,UserSessionData> entry: list_of_active_users.entrySet()) {
             if(entry.getValue().getSocket().equals(socket)) {
                 synchronized (list_of_active_users){
+                    getAccountPerSocket(socket);
                     list_of_active_users.remove(entry.getKey());
                     System.out.println("Obrisan" + socket.getSessionId());
                 }
@@ -109,6 +110,23 @@ class ActiveUsers {
         }
         return -1;
     }
+
+    private static Accounts getAccountPerSocket(SocketIOClient socketIOClient){
+        for (Map.Entry<UUID,UserSessionData> entry : list_of_active_users.entrySet()) {
+            System.out.println("Uporedjujem:" + entry.getValue().getSocket() + " i " + socketIOClient);
+            if(entry.getValue().getSocket() == socketIOClient && entry.getValue().getAccounts().isStatus()){
+                try{
+                    System.out.println(objectMapper.writeValueAsString(entry.getValue().getAccounts()));
+                    IEngine engine = ServerSocketIO.getEngine();
+                    GameStatus status = engine.surrender(entry.getValue().getAccounts());
+                    sendEngGame(status);
+                }
+                catch (Exception e){}
+            }
+        }
+        return null;
+    }
+
     public static void sendPrivateMessage(PrivateMessage privateMessage){
         if(!private_message_list.containsKey(privateMessage.getMessageTo())){
             synchronized (private_message_list){

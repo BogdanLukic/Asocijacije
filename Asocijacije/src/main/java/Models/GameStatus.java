@@ -1,6 +1,7 @@
 package Models;
 
 import Entities.*;
+import Services.Timer;
 
 import java.io.Serializable;
 
@@ -17,12 +18,22 @@ public class GameStatus implements Serializable {
     private EChallange on_turn;
     private EChallange play;
 
+    private int second;
+
     public GameStatus() {
         status_column_a = new Column_A();
         status_column_b = new Column_B();
         status_column_c = new Column_C();
         status_column_d = new Column_D();
         status_konacno_resenje = new FinalAnswer();
+    }
+
+    public int getSecond() {
+        return second;
+    }
+
+    public void setSecond(int second) {
+        this.second = second;
     }
 
     public Challenge getChallenge() {
@@ -96,7 +107,6 @@ public class GameStatus implements Serializable {
     public void setStatus_konacno_resenje(FinalAnswer status_konacno_resenje) {
         this.status_konacno_resenje = status_konacno_resenje;
     }
-
     public EChallange getPlay() {
         return play;
     }

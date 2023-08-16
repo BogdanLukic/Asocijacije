@@ -367,18 +367,16 @@ function canPlay(obj){
         obj.status_column_c.one != null && obj.status_column_c.two !=null && obj.status_column_c.three !=null && obj.status_column_c.four !=null && 
         obj.status_column_d.one != null && obj.status_column_d.two !=null && obj.status_column_d.three !=null && obj.status_column_d.four !=null)
         {
-            // try{
-                place = document.querySelector(".party-page");
-                place.classList.remove('everything'); 
-                place.classList.remove('disable-inputs');
+            place = document.querySelector(".party-page");
+            place.classList.remove('everything'); 
+            place.classList.remove('disable-inputs');
     
-                disable_skip = document.querySelector("#disable-skip");
-                disable_skip.classList.remove('disable-skip');
-                disable_skip.classList.add('no-disable-skip');
+            disable_skip = document.querySelector("#disable-skip");
+            disable_skip.classList.remove('disable-skip');
+            disable_skip.classList.add('no-disable-skip');
 
-                console.log("USAO");
-            // }
-            // catch(e){}
+            console.log("USAO");
+            not_playable();
         }
 }
 
@@ -454,18 +452,34 @@ function displayEndGame(obj){
         </div>`;
         }
         else{
-            div_overlay.innerHTML+=`<div class="overlay-notify">
-            <div>
-                <h2>Nažalost, izgubili ste:</h2>
-            </div>
-            <div>
-                <h3>${obj.points} poena</h3>
-            </div>
-            <div class="">
-                <button onclick="goToLobby()" class="play-button-solo skip">Početna</button>
-            </div>
-        </div>`;
+            if(obj.points > 0)
+            {
+                div_overlay.innerHTML+=`<div class="overlay-notify">
+                <div>
+                    <h2>Nažalost, izgubili ste:</h2>
+                </div>
+                <div>
+                    <h3>${obj.points} poena</h3>
+                </div>
+                <div class="">
+                    <button onclick="goToLobby()" class="play-button-solo skip">Početna</button>
+                </div>
+            </div>`;
+            }
+            else{
+                div_overlay.innerHTML+=`<div class="overlay-notify">
+                <div>
+                    <h2>Rezultat je nerešen:</h2>
+                </div>
+                <div>
+                    <h3>${obj.points} poena</h3>
+                </div>
+                <div class="">
+                    <button onclick="goToLobby()" class="play-button-solo skip">Početna</button>
+                </div>
+            </div>`;
+            }
         }
-    },750)
+    },550)
     
 }

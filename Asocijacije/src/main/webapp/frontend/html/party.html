@@ -13,7 +13,7 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>  
 </head>
   <body onload="initParty()">
-<!-- <body> -->
+<!-- <body onload="startTimer()"> -->
 
     <div id="overlay" style="display: none;">
         <!-- <div class="overlay-notify">
@@ -47,6 +47,7 @@
                 </div>
                 <div class="match-vs">
                     <img src="../images/icons/sword-white.png">
+                    <div id="app"></div>
                 </div>
                 <div class="player blue">
                     <div class="player-name">
@@ -165,5 +166,6 @@
     <script src="../js/Socket/WebSocket.js"></script>
     <script src="../js/Socket/WebSocketParty.js"></script>
     <script src="../js/party.js"></script>
+    <script src="../js/timer.js"></script>
   </body>
   </html>

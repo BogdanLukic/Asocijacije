@@ -43,6 +43,10 @@ function endTurn(obj){
     socket.emit("end-turn",JSON.stringify(obj));
 }
 
+function not_playable(){
+    socket.emit("not-playable",sessionStorage.getItem('uuid_of_game'));
+}
+
 // EVENTS
 // ===========================================================================
 function addEventsParty(){
@@ -59,12 +63,17 @@ function reciveTurn(){
     });
     socket.on('your-turn',(data)=>{
         setDisable(data);
+        console.log('igras');
+        // restartTimer();
+        startTimer(true);
     });
 }
 function reciveStatus(){
     socket.on('send-game-status',(data)=>{
         obj = JSON.parse(data);
         setGameInfo(obj);
+        restartTimer(obj.second);
+        // startTimer();
         console.log(obj);
     });
 }
@@ -77,6 +86,8 @@ function reciveGuessColumn(){
 function reciveNotYourTurn(){
     socket.on('not-your-turn',(data)=>{
         setDisable('default');
+        // restartTimer();
+        startTimer(false);
     }) 
 }
 function reciveEndGame(){
