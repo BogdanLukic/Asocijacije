@@ -24,17 +24,14 @@ public class Engine extends UnicastRemoteObject implements IEngine{
     }
     @Override
     public void createNewGame(UUID uuid, Challenge challenge) throws RemoteException{
-        int num_of_row = databaseAsocijacije.numOfRows();
-        int asocijacije = random.nextInt(num_of_row) + 1;
-
         GameAnswer gameAnswer = new GameAnswer();
         gameAnswer.setOn_turn(EChallange.challanger);
         gameAnswer.setPlay(EChallange.open);
         gameAnswer.setChallenge(challenge);
-        gameAnswer.setAsocijacija(asocijacije);
 
-        gameAnswer.setKonacno_resenje(databaseAsocijacije.getKonacnoResenje(asocijacije));
+        gameAnswer.setKonacno_resenje(databaseAsocijacije.getKonacnoResenje());
 
+        gameAnswer.setAsocijacija(gameAnswer.getAsocijacija());
         gameAnswer.setColumn_a(databaseAsocijacije.getKolonaA(gameAnswer.getKonacno_resenje().getId()));
         gameAnswer.setColumn_b(databaseAsocijacije.getKolonaB(gameAnswer.getKonacno_resenje().getId()));
         gameAnswer.setColumn_c(databaseAsocijacije.getKolonaC(gameAnswer.getKonacno_resenje().getId()));

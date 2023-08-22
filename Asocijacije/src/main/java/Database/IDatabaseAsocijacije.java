@@ -11,7 +11,7 @@ public interface IDatabaseAsocijacije {
     Column_B getKolonaB(int id_asocijacije);
     Column_C getKolonaC(int id_asocijacije);
     Column_D getKolonaD(int id_asocijacije);
-    FinalAnswer getKonacnoResenje(int max_row);
+    FinalAnswer getKonacnoResenje();
     List<Association> getListOfAssociation();
     void addAssociation (Association association);
     void removeAssociation(int association_id);

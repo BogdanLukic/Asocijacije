@@ -23,13 +23,12 @@ public class AssociationList extends HttpServlet {
     ObjectMapper objMapper;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
-        connection = DatabaseAsocijacije.getConnection();
-        objMapper = new ObjectMapper();
-    }
-
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if(connection == null)
+            connection = DatabaseAsocijacije.getConnection();
+        if(objMapper == null)
+            objMapper = new ObjectMapper();
+
         List<Association> associationList = connection.getListOfAssociation();
         BufferedWriter bw = new BufferedWriter(response.getWriter());
 
@@ -39,6 +38,11 @@ public class AssociationList extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(connection == null)
+            connection = DatabaseAsocijacije.getConnection();
+        if(objMapper == null)
+            objMapper = new ObjectMapper();
+
         StringBuilder jsonBody = new StringBuilder();
         try (BufferedReader reader = req.getReader()) {
             String line;
@@ -67,6 +71,11 @@ public class AssociationList extends HttpServlet {
     }
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if(connection == null)
+            connection = DatabaseAsocijacije.getConnection();
+        if(objMapper == null)
+            objMapper = new ObjectMapper();
+
         StringBuilder id = new StringBuilder();
         try (BufferedReader reader = req.getReader()) {
             String line;
@@ -75,8 +84,10 @@ public class AssociationList extends HttpServlet {
             }
         }
         int id_int = Integer.parseInt(id.toString());
-        connection.removeAssociation(id_int);
         BufferedWriter bw = new BufferedWriter(resp.getWriter());
+
+        connection.removeAssociation(id_int);
+
         bw.write("obrisano");
         bw.flush();
 

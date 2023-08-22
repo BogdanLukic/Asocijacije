@@ -56,6 +56,7 @@ function renderAssociations(list){
     association_list_field = document.querySelector("#association-list");
     association_list_field.innerHTML = "";
     for(i of list){
+        as_id = i.finalAnswer.id;
         association_list_field.innerHTML += `<div class="association">
                                                 <div>
                                                     <p>${i.finalAnswer.name}</p>
@@ -68,7 +69,7 @@ function renderAssociations(list){
                                                 </div>
                                                 <div class="association-edit">
                                                     <div onclick='editAssociation(${JSON.stringify(i)})'><i class="bi bi-eye clicable"></i></div>
-                                                    <div onclick=deleteAssociation(${JSON.stringify(i)})><i class="bi bi-trash clicable"></i></div>
+                                                    <div onclick=deleteAssociation(${as_id})><i class="bi bi-trash clicable"></i></div>
                                                 </div>
                                             </div>`;
     }
@@ -271,20 +272,23 @@ function addNewAssociation(){
     
 }
 function deleteAssociation(id){
+    console.log("BRISEM: "+id);
     let options = {
         method: 'DELETE',
         headers: {
             'Content-Type': 
                 'application/json;charset=utf-8'
         },
-        body: id.finalAnswer.id
+        body: id
     }
     let fetchRes = fetch("http://localhost:8081/Asocijacije_war_exploded/associationlist",options);
     fetchRes.then()
     .then(
         d=>{
+            console.log(d);
             getAllAssociations();
         }
+
     );
 }
 

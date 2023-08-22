@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DatabaseAsocijacije implements IDatabaseAsocijacije{
     private static IDatabaseAsocijacije db;
@@ -88,15 +89,18 @@ public class DatabaseAsocijacije implements IDatabaseAsocijacije{
     }
 
     @Override
-    public FinalAnswer getKonacnoResenje(int max_row) {
-
-        String jpql = "SELECT k_r FROM FinalAnswer k_r WHERE k_r.id = :id_asocijacije";
+    public FinalAnswer getKonacnoResenje() {
+        String jpql = "SELECT k_r FROM FinalAnswer k_r";
         TypedQuery<FinalAnswer> query = em.createQuery(jpql, FinalAnswer.class);
-        query.setParameter("id_asocijacije",max_row);
         List<FinalAnswer> response = query.getResultList();
-        if(!response.isEmpty())
-            return response.get(0);
-        return null;
+        int max_row = response.size();
+        Random r = new Random();
+        int row = r.nextInt(max_row);
+
+        FinalAnswer fa =  query.getResultList().get(row);
+        if(fa != null)
+            return fa;
+        return query.getResultList().get(0);
     }
 
     @Override
@@ -132,12 +136,13 @@ public class DatabaseAsocijacije implements IDatabaseAsocijacije{
     }
     @Override
     public void removeAssociation(int association_id) {
-        em.clear();
         Column_A ca = em.find(Column_A.class, association_id);
         Column_B cb = em.find(Column_B.class, association_id);
         Column_C cc = em.find(Column_C.class, association_id);
         Column_D cd = em.find(Column_D.class, association_id);
         FinalAnswer fa = em.find(FinalAnswer.class, association_id);
+
+        System.out.println("Pronadjeno:" + ca.getName());
 
         try{
             em.getTransaction().begin();
