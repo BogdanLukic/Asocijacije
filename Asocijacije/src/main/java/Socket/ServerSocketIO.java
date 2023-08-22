@@ -92,6 +92,7 @@ class ServerSocketIO {
         forwardPlayer();
         forwardLabel();
         play();
+        admin();
     }
     ObjectMapper objectMapper = new ObjectMapper();
     private void register(){
@@ -246,6 +247,21 @@ class ServerSocketIO {
                     ActiveUsers.sendEngGame(gameStatus);
                     engine.removeGame(gameStatus.getChallenge().getUuid());
                 }
+            }
+        });
+    }
+//   ADMINISTRATION
+    private void admin(){
+        server.addEventListener("admin-register", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                ActiveUsers.registerAdmin(socketIOClient);
+            }
+        });
+        server.addEventListener("get-user-list", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                ActiveUsers.sendListOfUser();
             }
         });
     }

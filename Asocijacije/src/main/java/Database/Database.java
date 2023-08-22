@@ -1,13 +1,13 @@
 package Database;
 
-import Entities.Accounts;
-import Entities.Role;
-import Entities.Score;
+import Entities.*;
+import Models.Association;
 import Models.ERegistrationStatus;
 import Models.EndGame;
 import Models.GameStatus;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Database implements IDatabase{
@@ -205,5 +205,34 @@ public class Database implements IDatabase{
             }
         }
         return response;
+    }
+
+    @Override
+    public List<Score> getAllAccounts() {
+        String jpql = "SELECT s, a FROM Score s JOIN Accounts a ON s.account_id = a.id";
+        Query query = em.createQuery(jpql);
+        List<Object[]> resultList = query.getResultList();
+
+        List<Score> response = new ArrayList<>();
+
+        for (Object[] result : resultList) {
+            Score score = (Score) result[0];
+            Accounts account = (Accounts) result[1];
+            score.setAccount(account);
+            response.add(score);
+        }
+        return response;
+    }
+
+    @Override
+    public void removeAccount(int account_id) {
+        Score score = em.find(Score.class, account_id);
+        Accounts accounts = em.find(Accounts.class, account_id);
+
+        em.getTransaction().begin();
+        em.remove(score);
+        em.remove(accounts);
+        em.getTransaction().commit();
+
     }
 }

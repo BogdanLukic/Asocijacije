@@ -2,6 +2,7 @@ package Database;
 
 import Entities.Accounts;
 import Entities.Score;
+import Models.Association;
 import Models.ERegistrationStatus;
 import Models.EndGame;
 import Models.GameStatus;
@@ -14,4 +15,6 @@ public interface IDatabase {
     Score getScore(Accounts account);
     void setPoints(GameStatus gameStatus, EndGame challanger, EndGame enemy);
     List<Score> getTopThree();
+    List<Score> getAllAccounts();
+    void removeAccount(int account_id);
 }

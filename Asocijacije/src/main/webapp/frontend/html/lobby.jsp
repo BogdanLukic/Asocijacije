@@ -82,7 +82,7 @@
                     <div class="logout">
                         <form action="lobby.jsp" method="post" id="logout-form">
                             <input type="hidden" name="logout" value="1">
-                            <p onclick="logout()">Izloguj se</p>
+                            <p onclick="logout()" class="clicable">Izloguj se</p>
                         </form>
                     </div>
                 </div>

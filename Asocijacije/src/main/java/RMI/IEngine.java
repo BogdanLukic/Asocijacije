@@ -1,14 +1,10 @@
 package RMI;
 
 import Entities.Accounts;
-import Models.Challenge;
-import Models.ColumnQuest;
-import Models.GameStatus;
-import Models.RequestedField;
+import Models.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.UUID;
 
 public interface IEngine extends Remote {

@@ -33,7 +33,10 @@
     else {
       session.setAttribute("token",acc_response);
       session.removeAttribute("error-login");
-      response.sendRedirect("lobby.jsp");
+      if(acc_response.getRole().getId() == 2)
+        response.sendRedirect("lobby.jsp");
+      else
+        response.sendRedirect("administration.jsp");
     }
   }
   else{

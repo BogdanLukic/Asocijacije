@@ -3,6 +3,7 @@ package Socket;
 import Database.Database;
 import Database.IDatabase;
 import Entities.Accounts;
+import Entities.Score;
 import Models.*;
 import RMI.Engine;
 import RMI.IEngine;
@@ -14,6 +15,8 @@ import java.util.*;
 class ActiveUsers {
     private static HashMap<UUID, UserSessionData> list_of_active_users = new HashMap<UUID,UserSessionData>();
     private static HashMap<String, Inbox> private_message_list = new HashMap<>();
+
+    private static UserSessionData admin = new UserSessionData();
 
     private static IDatabase database;
     private static Object lock = new Object();
@@ -64,6 +67,8 @@ class ActiveUsers {
                 sendAllChanges();
             }
         }
+        if(admin!=null && admin.getSocket().equals(socket))
+            admin = null;
     }
     private static ObjectMapper objectMapper = new ObjectMapper();
     public static void sendAllChanges(){
@@ -81,6 +86,8 @@ class ActiveUsers {
         catch (Exception e){
             e.printStackTrace();
         }
+        if(admin != null)
+            sendListOfUser();
     }
 
     public static void sendGlobalMessage(Message message){
@@ -113,10 +120,8 @@ class ActiveUsers {
 
     private static Accounts getAccountPerSocket(SocketIOClient socketIOClient){
         for (Map.Entry<UUID,UserSessionData> entry : list_of_active_users.entrySet()) {
-            System.out.println("Uporedjujem:" + entry.getValue().getSocket() + " i " + socketIOClient);
             if(entry.getValue().getSocket() == socketIOClient && entry.getValue().getAccounts().isStatus()){
                 try{
-                    System.out.println(objectMapper.writeValueAsString(entry.getValue().getAccounts()));
                     IEngine engine = ServerSocketIO.getEngine();
                     GameStatus status = engine.surrender(entry.getValue().getAccounts());
                     sendEngGame(status);
@@ -290,5 +295,33 @@ class ActiveUsers {
         catch (Exception e){}
 
     }
+//    ADMIN
+    public static void registerAdmin(SocketIOClient socket){
+        admin = new UserSessionData();
+        admin.setSocket(socket);
+    }
+    public static void sendListOfUser(){
+        if(admin!=null){
+            if(database == null)
+                database = getDatabase();
+            List<Score> accountsList =  database.getAllAccounts();
+            List<Accounts> active_user_list = getAllActiveUsers(null);
+            List<Score> active_accountList = new ArrayList<>();
 
+            for (Accounts a : active_user_list){
+                for(Score s : accountsList){
+                    if(a.getId() == s.getAccount_id()){
+                        active_accountList.add(s);
+                        accountsList.remove(s);
+                        break;
+                    }
+
+                }
+            }
+            ListOfAccountsAdmin loaa = new ListOfAccountsAdmin();
+            loaa.setActive_user_list(active_accountList);
+            loaa.setScore_list(accountsList);
+            admin.getSocket().sendEvent("get-user-list",loaa);
+        }
+    }
 }

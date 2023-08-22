@@ -32,11 +32,13 @@ public class Engine extends UnicastRemoteObject implements IEngine{
         gameAnswer.setPlay(EChallange.open);
         gameAnswer.setChallenge(challenge);
         gameAnswer.setAsocijacija(asocijacije);
-        gameAnswer.setColumn_a(databaseAsocijacije.getKolonaA(asocijacije));
-        gameAnswer.setColumn_b(databaseAsocijacije.getKolonaB(asocijacije));
-        gameAnswer.setColumn_c(databaseAsocijacije.getKolonaC(asocijacije));
-        gameAnswer.setColumn_d(databaseAsocijacije.getKolonaD(asocijacije));
+
         gameAnswer.setKonacno_resenje(databaseAsocijacije.getKonacnoResenje(asocijacije));
+
+        gameAnswer.setColumn_a(databaseAsocijacije.getKolonaA(gameAnswer.getKonacno_resenje().getId()));
+        gameAnswer.setColumn_b(databaseAsocijacije.getKolonaB(gameAnswer.getKonacno_resenje().getId()));
+        gameAnswer.setColumn_c(databaseAsocijacije.getKolonaC(gameAnswer.getKonacno_resenje().getId()));
+        gameAnswer.setColumn_d(databaseAsocijacije.getKolonaD(gameAnswer.getKonacno_resenje().getId()));
 
         gameAnswer.getTimer().startTimer();
 
