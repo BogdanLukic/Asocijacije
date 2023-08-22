@@ -246,3 +246,19 @@ button{
 .verify-edit-x{
     background-color: var(--color-in-game-lobby);
 }
+
+.logout{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    font-size: 22px;
+    gap: 10px;
+}
+.logout p{
+    transition: all .2s ease-in-out;
+}
+.logout p:hover{
+    transform: scale(1.1);
+    color: var(--light-blue);
+}

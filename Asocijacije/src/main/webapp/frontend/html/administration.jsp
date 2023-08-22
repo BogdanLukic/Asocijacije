@@ -11,6 +11,11 @@
             return;
         }
     }
+    if(request.getParameter("logout") != null){
+        session.removeAttribute("token");
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 
 <!DOCTYPE html>
@@ -34,7 +39,12 @@
                 <img src="../images/logo/logo.png">
                 <p>Administracija</p>
             </div>
-
+            <div class="logout">
+                <form action="lobby.jsp" method="post" id="logout-form">
+                    <input type="hidden" name="logout" value="1">
+                    <p onclick="logout()" class="clicable">Izloguj se</p>
+                </form>
+            </div>
             <div class="admin-page-main">
                 <div class="place">
                     <p>Lista korisnika:</p>

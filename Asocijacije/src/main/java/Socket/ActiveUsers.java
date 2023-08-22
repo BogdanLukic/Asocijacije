@@ -264,7 +264,7 @@ class ActiveUsers {
 
             EndGame challanger = new EndGame();
             EndGame enemy = new EndGame();
-
+            System.out.println(points_of_challanger + " " + points_of_enemy);
             if(points_of_challanger > points_of_enemy){
                 challanger.setWin(true);
                 challanger.setPoints(points_of_challanger - points_of_enemy);
@@ -289,8 +289,10 @@ class ActiveUsers {
 
             database.setPoints(gameStatus, challanger, enemy);
 
-            socket_chalanger.sendEvent("end-game",objectMapper.writeValueAsString(challanger));
-            socket_enemy.sendEvent("end-game",objectMapper.writeValueAsString(enemy));
+            if(socket_chalanger.isChannelOpen())
+                socket_chalanger.sendEvent("end-game",objectMapper.writeValueAsString(challanger));
+            if(socket_enemy.isChannelOpen())
+                socket_enemy.sendEvent("end-game",objectMapper.writeValueAsString(enemy));
         }
         catch (Exception e){}
 

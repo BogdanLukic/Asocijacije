@@ -51,7 +51,7 @@ public class Database implements IDatabase{
             List<Accounts> response = query.getResultList();
             if(!response.isEmpty()){
                 Accounts response_account = response.get(0);
-                response_account.setPassword("");
+//                response_account.setPassword("");
                 return response_account;
             }
         }

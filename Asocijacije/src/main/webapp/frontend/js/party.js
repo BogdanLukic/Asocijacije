@@ -433,8 +433,12 @@ function goToLobby(){
     window.open("lobby.jsp","_self");
 }
 
+var opened = false;
 function displayEndGame(obj){
-    div_overlay = document.querySelector("#overlay");
+    
+    if(opened == false){
+        opened = true;
+        div_overlay = document.querySelector("#overlay");
     setTimeout(()=>{
         div_overlay.style.display = '';
         div_overlay.classList.add('scale-in-center');
@@ -452,8 +456,21 @@ function displayEndGame(obj){
         </div>`;
         }
         else{
-            if(obj.points > 0)
+            if(obj.points == 0)
             {
+                div_overlay.innerHTML+=`<div class="overlay-notify">
+                    <div>
+                        <h2>Rezultat je nerešen:</h2>
+                    </div>
+                    <div>
+                        <h3>${obj.points} poena</h3>
+                    </div>
+                    <div class="">
+                        <button onclick="goToLobby()" class="play-button-solo skip">Početna</button>
+                    </div>
+                </div>`;
+            }
+            else{
                 div_overlay.innerHTML+=`<div class="overlay-notify">
                 <div>
                     <h2>Nažalost, izgubili ste:</h2>
@@ -466,20 +483,7 @@ function displayEndGame(obj){
                 </div>
             </div>`;
             }
-            else{
-                div_overlay.innerHTML+=`<div class="overlay-notify">
-                <div>
-                    <h2>Rezultat je nerešen:</h2>
-                </div>
-                <div>
-                    <h3>${obj.points} poena</h3>
-                </div>
-                <div class="">
-                    <button onclick="goToLobby()" class="play-button-solo skip">Početna</button>
-                </div>
-            </div>`;
-            }
         }
     },550)
-    
+    }
 }

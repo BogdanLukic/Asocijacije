@@ -309,3 +309,8 @@ function deleteAccount(id){
         }
     );
 }
+
+function logout(){
+    document.getElementById("logout-form").submit();
+    sessionStorage.clear();
+}
